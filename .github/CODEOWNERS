@@ -1,0 +1,4 @@
+# Automatically generated CODEOWNERS
+# Regenerate with `make update-codeowners`
+draft-ietf-mailmaint-interoperable-addresses.md arnt@gulbrandsen.priv.no yaojk@cnnic.cn
+draft-ietf-mailmaint-smtputf8-syntax.md arnt@gulbrandsen.priv.no yaojk@cnnic.cn

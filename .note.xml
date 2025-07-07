@@ -1,0 +1,7 @@
+<note title="Discussion Venues" removeInRFC="true">
+<t>Discussion of this document takes place on the
+    Mail Maintenance Working Group mailing list (mailmaint@ietf.org),
+    which is archived at <eref target="https://mailarchive.ietf.org/arch/browse/mailmaint/"/>.</t>
+<t>Source for this draft and an issue tracker can be found at
+    <eref target="https://github.com/arnt/mailmaint-smtputf8"/>.</t>
+</note>
