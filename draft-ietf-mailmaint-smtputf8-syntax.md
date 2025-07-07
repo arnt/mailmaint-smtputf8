@@ -47,7 +47,7 @@ informative:
     author:
       -
         name: Ken Whistler
-	email: ken@unicode.org
+        email: ken@unicode.org
   UMLAUT:
     target: https://en.wikipedia.org/wiki/Metal_umlaut
     title: Metal Umlaut
@@ -206,8 +206,9 @@ make it difficult to cut and paste.
 
 # Acknowledgments
 
-The authors wish to thank John C. Klensin, [your name here, please]
-[oh wow, the ack section is already outdated]
+The authors wish to thank John C. Klensin, (your name here, please)
+
+(Wow, the ack section is already outdated)
 
 Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
 examples and documentation.
