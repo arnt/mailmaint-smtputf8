@@ -291,8 +291,9 @@ Table of Contents
 
 Appendix A.  Acknowledgments
 
-   The authors wish to thank John C.  Klensin, [your name here, please]
-   [oh wow, the ack section is already outdated]
+   The authors wish to thank John C.  Klensin, (your name here, please)
+
+   (Wow, the ack section is already outdated)
 
    Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
    examples and documentation.
