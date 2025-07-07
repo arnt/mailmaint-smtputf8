@@ -3,7 +3,7 @@ stand_alone: true
 ipr: trust200902
 cat: std
 submissiontype: IETF
-area: Applications
+area: "Applications and Real-Time"
 wg: mailmaint
 
 docname: draft-ietf-mailmaint-interoperable-addresses-latest
