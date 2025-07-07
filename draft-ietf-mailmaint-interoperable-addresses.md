@@ -6,7 +6,7 @@ submissiontype: IETF
 area: Applications
 wg: mailmaint
 
-docname: draft-ietf-mailmaint-smtputf8-interoperable-addresses
+docname: draft-ietf-mailmaint-interoperable-addresses-latest
 
 title: Interoperable Email Addresses for SMTPUTF8
 abbrev: UTF8=ACCEPT

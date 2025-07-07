@@ -6,7 +6,7 @@ submissiontype: IETF
 area: Applications
 wg: mailmaint
 
-docname: draft-ietf-mailmaint-smtputf8-syntax
+docname: draft-ietf-mailmaint-smtputf8-syntax-latest
 
 title: SMTPUTF8 address syntax
 lang: en
