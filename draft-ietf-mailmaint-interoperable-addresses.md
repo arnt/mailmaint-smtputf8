@@ -50,7 +50,7 @@ informative:
     author:
       -
         name: Ken Whistler
-	email: ken@unicode.org
+        email: ken@unicode.org
   UMLAUT:
     target: https://en.wikipedia.org/wiki/Metal_umlaut
     title: Metal Umlaut
