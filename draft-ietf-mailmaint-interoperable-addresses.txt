@@ -10,7 +10,7 @@ Expires: 8 January 2026                                            CNNIC
 
 
                Interoperable Email Addresses for SMTPUTF8
-         draft-ietf-mailmaint-smtputf8-interoperable-addresses
+          draft-ietf-mailmaint-interoperable-addresses-latest
 
 Abstract
 
@@ -25,6 +25,17 @@ Abstract
    "simple to cut-and-paste" and "understandable by some community".)
    Its companion defines simpler rules, accepts more addresses, and is
    intended for software like MTAs.
+
+Discussion Venues
+
+   This note is to be removed before publishing as an RFC.
+
+   Discussion of this document takes place on the Mail Maintenance
+   Working Group mailing list (mailmaint@ietf.org), which is archived at
+   https://mailarchive.ietf.org/arch/browse/mailmaint/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/arnt/mailmaint-smtputf8.
 
 Status of This Memo
 

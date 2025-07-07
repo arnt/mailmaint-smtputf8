@@ -10,7 +10,7 @@ Expires: 8 January 2026                                            CNNIC
 
 
                         SMTPUTF8 address syntax
-                  draft-ietf-mailmaint-smtputf8-syntax
+              draft-ietf-mailmaint-smtputf8-syntax-latest
 
 Abstract
 
@@ -23,6 +23,17 @@ Abstract
    software such an MTA.  Its companion defines has more complex rules,
    takes regional usage into account and aims to allow only addresses
    that are readable and cut-and-pastable in some community.
+
+Discussion Venues
+
+   This note is to be removed before publishing as an RFC.
+
+   Discussion of this document takes place on the Mail Maintenance
+   Working Group mailing list (mailmaint@ietf.org), which is archived at
+   https://mailarchive.ietf.org/arch/browse/mailmaint/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/arnt/mailmaint-smtputf8.
 
 Status of This Memo
 
@@ -280,8 +291,9 @@ Table of Contents
 
 Appendix A.  Acknowledgments
 
-   The authors wish to thank John C.  Klensin, [your name here, please]
-   [oh wow, the ack section is already outdated]
+   The authors wish to thank John C.  Klensin, (your name here, please)
+
+   (Wow, the ack section is already outdated)
 
    Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
    examples and documentation.
