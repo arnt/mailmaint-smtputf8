@@ -1,0 +1,87 @@
+[
+    {
+	"address": "example@example.com",
+	"valid": true,
+	"interoperable": true,
+	"comment": "some unit test frameworks permit specifying a reason for a test"
+    },
+    {
+	"address": "example@xn--gr-zia.example.com",
+	"valid": false,
+	"comment": "an a-label (xn--...) is not permitted in the domain"
+    },
+    {
+	"address": "xn--gr-zia@example.com",
+	"valid": false,
+	"comment": "an a-label (xn--...) is not permitted in the localpart"
+    },
+    {
+	"address": "com.xn--gr-zia@example.com",
+	"valid": false,
+	"comment": "an a-label (xn--...) is not permitted in the localpart"
+    },
+    {
+	"address": "..@example.com",
+	"valid": true,
+	"interoperable": false,
+	"comment": "WHATWG input type=email specification bans .."
+    },
+    {
+	"address": "\u0627@example.com",
+	"valid": true,
+	"interoperable": false,
+	"comment": "contains both right-to-left nondigits and something left-to-right"
+    },
+    {
+	"address": "\u0627@2\u0627.\u0627",
+	"valid": true,
+	"interoperable": true,
+	"comment": "contains right-to-left digits and something left-to-right"
+    },
+    {
+	"address": "\u200e4@example.com",
+	"valid": false,
+	"comment": "left-to-right marks are not permitted by PRECIS"
+    },
+    {
+	"address": "\u061c@example.com",
+	"valid": false,
+	"comment": "061c is forbidden by PRECIS (unicode class Cf, precis C)"
+    },
+    {
+	"address": "阿Q正传@阿Q正传.example",
+	"valid": true,
+	"interoperable": true,
+	"comment": "Han+ASCII is permitted"
+    },
+    {
+	"address": "Толстой@example.com",
+	"valid": false,
+	"comment": "valid, sadly, because ASCII+Cyrillic is permitted"
+    },
+    {
+	"address": "IВM@dømi.fo",
+	"valid": false,
+	"comment": "forbidden because of different scripts (В is Cyrillic and ø is Latin)"
+    },
+    {
+	"address": "xn--gr-zia@example.com",
+	"valid": false,
+	"comment": "an a-label (xn--...) is not permitted in the localpart"
+     },
+ {
+   "address": "xn--gr-zia@example.com",
+     "valid": false,
+     "comment": "an a-label (xn--...) is not permitted in the localpart"
+     },
+ {
+   "address": "xn--gr-zia@example.com",
+     "valid": false,
+     "comment": "an a-label (xn--...) is not permitted in the localpart"
+     },
+ {
+   "address": "xn--gr-zia@example.com",
+     "valid": false,
+     "comment": "an a-label (xn--...) is not permitted in the localpart"
+     },
+ ]

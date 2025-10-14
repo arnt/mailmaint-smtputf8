@@ -366,11 +366,27 @@ The rules in this document permit a number of code points that
 
 --- back
 
+# Testing
+
+This is a set of test addresses in JSON format.
+
+Below is a verbatim copy of
+https://github.com/arnt/mailmaint-smtputf8/tests.json as it was
+on (date here). It contains a number of strange and unusual code points, so
+cutting and pasting this may not work. Rather, it is recommended to
+either use the rfcstrip tool or download the tests using a command
+such as curl
+https://github.com/arnt/mailmaint-smtputf8/tests.json >
+tests.json.
+
+Note to IETF reviewers: The tests will be included here shortly before
+publication (and after IETF Last Call).
+
 # Acknowledgments
 
 The authors wish to thank John C. Klensin, Jeremy Harris,
-[your name here, please]
-[oh wow, the ack section is already outdated]
+Daniel Eggert,
+(your name here, please)
 
 Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
 examples and documentation.

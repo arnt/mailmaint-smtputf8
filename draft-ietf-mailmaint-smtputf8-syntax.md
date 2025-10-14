@@ -204,6 +204,22 @@ make it difficult to cut and paste.
 
 --- back
 
+# Testing
+
+This is a set of test addresses in JSON format.
+
+Below is a verbatim copy of
+https://github.com/arnt/mailmaint-smtputf8/tests.json as it was
+on (date here). It contains a number of strange and unusual code points, so
+cutting and pasting this may not work. Rather, it is recommended to
+either use the rfcstrip tool or download the tests using a command
+such as curl
+https://github.com/arnt/mailmaint-smtputf8/tests.json >
+tests.json.
+
+Note to IETF reviewers: The tests will be included here shortly before
+publication (and after IETF Last Call).
+
 # Acknowledgments
 
 The authors wish to thank John C. Klensin, (your name here, please)
@@ -224,11 +240,7 @@ Please remove the Open Issues section.
 
 # Open issues
 
-1. PRECIS IdentifierClass?
-
-2. More examples.
-
-3. Wording to identify destiny; I think this should probably become a
+1. Wording to identify destiny; I think this should probably become a
 proposed standard and modify a couple of RFCs, but I'm uncertain about
 some details and left that open now.
 
