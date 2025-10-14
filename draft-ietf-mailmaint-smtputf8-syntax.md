@@ -29,25 +29,26 @@ author:
   email: yaojk@cnnic.cn
 
 normative:
-  RFC2119:
   RFC5322:
+  RFC5892:
   RFC6365:
   RFC6530:
   RFC6532:
-  RFC6533:
+  RFC8264:
 
 informative:
   RFC3490:
   RFC5891:
+  RFC6533:
   RFC6854:
   RFC6858:
   UAX24:
     target: https://unicode.org/reports/tr24
     title: Unicode Script Property
+    date: 2025-07-31
     author:
       -
         name: Ken Whistler
-        email: ken@unicode.org
   UMLAUT:
     target: https://en.wikipedia.org/wiki/Metal_umlaut
     title: Metal Umlaut
@@ -140,42 +141,35 @@ and three Han code points.
 
 Based on the above goals, the following rules are formulated:
 
-1. An address MUST NOT contain an a-label (e.g. xn--dmi-0na).
+1. An atom in an address MUST NOT be an a-label (e.g. xn--dmi-0na).
 
-2. An address MUST contain only code points in the PRECIS
-IdentifierClass.
+2. An address MUST contain only code points in the "A", "H" and "K"
+classes defined by [RFC5892] and [RFC8264], as well as the code points
+allowed by the "F" class, also defined by [RFC5892], "." and "@".
 
-3. An address MUST consist entirely of a sequence of composite
-characters, ZWJ and ZWNJ. ("c" followed by "combining hook below" is
-an example of a composite character, "d" is another example; see
-{{RFC6365}} for the definition.)
-
-4. An address MOT NOT contain more than one script, disregarding
-ASCII. (Disregarding ASCII, the word Orléans contains only an é, which
-is one script, namely Latin.)
+3. An address MUST NOT contain more than one script, when ASCII is
+disregarded. (For example: In the word word Orléans, Orl and ans are
+ASCII and é is non-ASCII. Since é is a single letter, the word
+contains only one script.)
 
 # Examples
 
 example@example.com is permitted, because 1) it does not contain any
-a-label, 2) it consists entirely of permissible code points, 4) it
-consists of 19 composite characters, and 4) it contains no non-ASCII
-code points at all.
+a-label, 2) it consists entirely of permissible code points and 3) it
+contains no non-ASCII code points at all.
 
-The address dømi@dømi.fo is permitted, because 1) it does not contain any
-a-label, 2) does not apply, 3) it consists entirely of permissible
-code points, 4) it consists of 12 composite characters, 5) does not apply
-and 6) it consists entirely of 'Latin' and 'Common' code points (and
-./@).
+The address dømi@dømi.fo is permitted, because 1) it does not contain
+any a-label, 2) it consists entirely of code points in the "A" and "K"
+classes and 3) it consists entirely of 'Latin' and 'Common' code
+points (and ./@).
 
-The address U+200E '@' U+200F '.' U+200E is not permitted, because 4)
-U+200E and U+200F are not parts of composite characters.
+The address U+200E '@' U+200F '.' U+200E is not permitted, because 3)
+U+200E and U+200F are in the "C" class as defined by [RFC5892], not A/H/K/F.
 
 阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
 dømi@dømi.fo is legal because it contains ASCII and Latin, but
 阿Q正传@dømi.fo is illegal becasue it contains Han 阿 and the Latin
 non-ASCII letter ø.
-
-TODO: add more examples and rationales again.
 
 # IANA Considerations {#IANA}
 

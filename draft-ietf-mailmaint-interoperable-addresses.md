@@ -30,7 +30,6 @@ author:
   email: yaojk@cnnic.cn
 
 normative:
-  RFC2119:
   RFC5322:
   RFC5890:
   RFC6365:
@@ -40,6 +39,7 @@ normative:
   RFC8264:
 
 informative:
+  RFC2142:
   RFC3490:
   RFC5891:
   RFC6854:
@@ -47,10 +47,10 @@ informative:
   UAX24:
     target: https://unicode.org/reports/tr24
     title: Unicode Script Property
+    date: 2025-07-31
     author:
       -
         name: Ken Whistler
-        email: ken@unicode.org
   UMLAUT:
     target: https://en.wikipedia.org/wiki/Metal_umlaut
     title: Metal Umlaut
@@ -85,7 +85,7 @@ domain parts by using encoded domain parts in the SMTP transaction
 
 The email address syntax extension is in {{RFC6532}}, and allows
 almost all UTF8 strings as localparts. While this certainly allows
-everything users want to use, it is also flexible enought to allow
+everything users want to use, it is also flexible enough to allow
 many things that users and implementers find surprising and sometimes
 worrying.
 
@@ -161,10 +161,8 @@ This section is informative.
 
 In the countries the authors have visited, the norm is that some users
 and organizations want to use their daily script(s), but not others.
-An Indian student in Japan or an Indian immigrant in an Arabic country
-will generally have his/her name spelt with either Latin letters or
-the host country's script, because that's how the university or
-company works.
+The name on your office door will be readable to your colleagues, no
+matter how your parents wrote it in the place where you were born.
 
 While the syntax defined in {{RFC6532}} technically supports addresses
 with an Indic localpart and a Japanese or Arabic domain part,
@@ -212,8 +210,8 @@ registry's rules apply to "beispiel".
 
 ## IDNA2008
 
-Using non-ASCII more or less requires IDNA2008, ie. if a the domain
-name is to be practically usable, it needs to be usable with IDNA2008,
+Using non-ASCII more or less requires IDNA2008, ie. if a domain name
+is to be practically usable, it needs to be usable with IDNA2008,
 which restricts the set of code points slightly.
 
 ## Registry rules
@@ -224,29 +222,29 @@ notably, a script or language has to be used by a current community in
 order to get an LGR. An LGR contains that which is currently used by
 the community.
 
+The merged repertoire of all code points in all LGRs is called the
+Common LGR, and contains more than 30,000 code points at the time of
+writing.
+
 Registering a domain name in a public TLD requires adhering to the
 registry's policy, which is generally either an LGR, a small
 registry-chosen set of code points, or restricted by rules outside the
 DNS (such as for .bank, which is effectively restricted by what names
 banking regulators allow banks to have).
 
-The merged repertoire of all code points in all LGRs is called the
-Common LGR, and contains more than 30,000 code points at the time of
-writing.
-
 ## Web browser rules
 
 The main browsers have rules for which domains are displayed in a
 human-readable manner in the address bar. (One author has a runic
 domain, all of the main browsers display xn--something in the address
-bar.) Each of the three big browser vendors maintains its own rule
-set. At the time of writing, all three may be described as broadly
-similar to the Common LGR and different in detail.
+bar instead of runes.) Each of the three big browser vendors maintains
+its own rule set. At the time of writing, all three may be described
+as broadly similar to the Common LGR and different in detail.
 
 # Rules for interoperable email addresses
 
 Based on the above descriptions, the following rules are formulated
-for interoperable email addresses. (See below rationales for each.)
+for interoperable email addresses.
 
 1. An atom in an interoperable address MUST NOT be an a-label.
 
@@ -254,91 +252,87 @@ for interoperable email addresses. (See below rationales for each.)
 be interoperable it MUST also match the grammar specified by the W3C
 WHATWG {{TYPE=EMAIL}} spec.
 
-3. An address MUST contain only code points within the PRECIS
-IdentifierClass.
+3. An address MUST conform to the PRECIS IdentifierClass.
 
-4. An address MUST consist entirely of a sequence of composite
-characters, ZWJ and ZWNJ. ("c" followed by "combining hook below" is
-an example of a composite character, "d" is another example; see
-{{RFC6365}} for the definition.)
-
-5. If an address contains any right-to-left code points, then it MAY
+4. If an address contains any right-to-left code points, then it MAY
 contain ASCII digits and MUST NOT contain any other left-to-right code
 points.
 
-6. If an address contains any non-ASCII code point, then one of the
+5. If an address contains any non-ASCII code point, then one of the
 following conditions MUST apply:
 
-   6.1. All code points share one unicode script property, or have the
-        script property Common, or are ASCII digits (or ./@).
+   1. All code points share one unicode script property, or have the
+      script property Common, or are ASCII digits (or ./@).
 
-   6.2. The localpart consists entirely of ASCII, and the domain part
-        consists of code points that share one unicode script property, or
-        have the script property Common, or are ASCII digits (or ./@).
+   2. The localpart consists entirely of ASCII, and the domain part
+      consists of code points that share one unicode script property, or
+      have the script property Common, or are ASCII digits (or ./@).
 
-   6.3. All code points are have the script properties Han or
-        Common, or are ASCII.
+   3. All code points are have the script properties Han or
+      Common, or are ASCII.
 
 # Examples
 
 The address example@example.com is interoperable, because 1) it does not
 contain any a-label, 2) it matches the WHATWG {{TYPE=EMAIL}} spec, 3)
-it consists entirely of permissible code points, 4) it consists of 19
-composite characters, and the last two conditions do not apply.
+it conforms to the IdentifierClass, and the last two conditions do not apply.
 
-The address dømi@dømi.fo is interoperable, because 1) it does not contain any
-a-label, 2) does not apply, 3) it consists entirely of permissible
-code points, 4) it consists of 12 composite characters, 5) does not
-apply and 6) it consists entirely of 'Latin' and 'Common' code points
-(and ./@).
+The address dømi@dømi.fo is interoperable, because 1) it does not
+contain any a-label, 2) does not apply, 3) it consists entirely of
+permissible code points, 4) does not apply and 6) it consists entirely
+of 'Latin' and 'Common' code points (and ./@).
 
 The address U+200E '@' U+200F '.' U+200E is not interoperable, because
-4) U+200E and U+200F are not parts of composite characters.
+4) U+200E and U+200F are not permitted in the PRECIS IdentifierClass.
 
-The address U+627 '1' '@' U+627 '2' '.' U+627 '3' is
-interoperable. (U+627 is an arabic letter, written right-to-left.) It
-is interoperable because 1) it does not contain any a-label, 2) does
-not apply, 3) it consists entirely of permissible code points, 4) it
-consists of 8 composite characters, 5) the only right-to-left code
+The address U+627 '@' '2' '.' '3' is interoperable.  (U+627 is an
+arabic letter, written right-to-left.) It is interoperable because 1)
+it does not contain any a-label, 2) does not apply, 3) it consists
+entirely of permissible code points, 4) the only right-to-left code
 points used are ASCII digits and 6) all code points are 'Arabic' or
 ASCII digits (or @/).
 
-(Note that it's interoperable even though top-level domain used does
-not exist, because '3' is not permitted by the current top-level
-domain name rules. Checking domain existence is simple if one assumes
-that internet access is available and the address is valid at the
-time, but this document does not assume assume either of those.)
+(Note that it's interoperable even though its top-level domain cannot
+exist: The rules in this document don't require network access, and
+therefore do not require checking whether a domain exists.)
 
 The address info@xn--dmi-0na.fo is not interoperable, because 1) it
 contains the a-label xn--dmi-0na.
 
 The address 名字@例子.中国 is interoperable, because 1) it does not
 contain any a-label, 2) does not apply, 3) it consists entirely of
-permissible code points, 4) it consists of 8 composite characters, 5)
-does not apply and 6) it consists entirely of 'Han' code points (and
-./@).
+permissible code points, 4) does not apply and 5) it consists entirely
+of 'Han' code points (and ./@).
 
 The address info@例子.中国 is interoperable, because 1) it does not
 contain any a-label, 2) does not apply, 3) it consists entirely of
-permissible code points, 4) it consists of 8 composite characters, 5)
-does not apply and 6) the localpart is ASCII and the domain part
-consists entirely of 'Han' code points (and .).
+permissible code points, 4) does not apply and 5) the localpart is
+ASCII and the domain part consists entirely of 'Han' code points (and
+.).
 
-The address dømi@例子.中国 is not interoperable, because 6) it
+The address dømi@例子.中国 is not interoperable, because 5) it
 contains both 'Latin' and 'Han' code points and the localpart is
 non-ASCII.
 
 The address 阿Q@阿Q正传@.中国 is interoperable, because 1) it does not
 contain any a-label, 2) does not apply, 3) it consists entirely of
-permissible code points, 4) it consists of composite characters, 5)
-does not apply and 6) the address consists entirely of ASCII and Han
-code points (and .).
+permissible code points, 4) does not apply and 5) the address consists
+entirely of ASCII and Han code points (and .).
 
-# Test Suite
+# Additional local rules
 
-Daniel Eggert suggested that this document (and its companion) need a
-large formal test suite, he suggested that it use JSON. This section
-is a placeholder.
+Software that provisions addresses using a particular script may apply
+additional restrictions.
+
+1. This document permits the use of all combining characters with
+letters in this script (formally, unicode \p{Common} is permitted in
+any script). In the case of scripts that do not use diacritical marks,
+it may be advisable to never create localparts with combining
+codepoints.
+
+2. If users are permitted to choose their own email addresses, it may be
+advisable to reserve names that sound official in the relevant languages,
+analogously with the list of English names in {{RFC2142}}.
 
 # IANA Considerations {#IANA}
 
@@ -395,7 +389,7 @@ examples and documentation.
 
 # Rationales for each condition
 
-This section is informative. Each of the six conditions has a separate
+This section is informative. Each of the five conditions has a separate
 rationale.
 
 1. A-labels are confusing for many readers, and can potentially be
@@ -408,27 +402,21 @@ the addresses that WHATWG covers, then it's possible to extend a
 WHATWG-compliant validator without risk of accidentally rejecting
 formerly accepted addresses.
 
-3. The PRECIS IdentifierClass is one of several similar sets, UAX31
-and the Common LGR being others. I'm quite uncertain which is most
-appropriate, there are arguments in favour of each.
+3. Unicode contains many code points that could perhaps be used for
+attacks. The PRECIS IdentifierClass constrains and the repertoire to
+the plainest code points, which makes the specification visibly
+trustworthy.
 
-4. Unicode contains many code points that could perhaps be used for
-attacks. Whether they could be used for attacks is not important,
-since one of the goals is to be safe at first glance even to
-implementers with limited knowledge of unicode. By constraining the
-repertoire to the plainest code points, the specification gains safety
-at first glance.
-
-5. Mixed-direction text can be confusing, and confusion has been used
+4. Mixed-direction text can be confusing, and confusion has been used
 to attack users before. This rule tries to gain safety at first glance
 by constraining mixed-direction text in addresses to that which is
 known to be necessary.
 
-6. This rule permits addresse that are e.g. all-Chinese or all-Thai,
+5. This rule permits addresse that are e.g. all-Chinese or all-Thai,
 and rejects addresses that mix e.g. Thai and Chinese. This restricts
 the scope for visually confusable code points. Since some communities
 are known to mix ASCII localparts with IDNs, combining left-to-right
-text with ASCII is allowed, at least in the way that's currently used.
+text with ASCII is allowed in the way that is currently used.
 
 Note that metal umlauts ("Mötley Crüe") are allowed (see
 {{UMLAUT}}). This is an unintentional feature.
@@ -442,22 +430,9 @@ Please remove the Open Issues section.
 
 # Open issues
 
-1. The use of PRECIS IdentifierClass seems correct, but both UAX31 and
-   the Common LGR are very similar and might work as well.
-
-2. The relationship with RFC 8265 needs to be explained somewhere. A
-   starting point: This document tries to guard against confusing
-   addresses, in the sense that they confuse humans. Computers can also
-   be confused; this document relies on RFC 8265 to make two confusable
-   addresses practically equal. If two addresses look confusable, but
-   test as identical according to 8264/5, then the confusability
-   shouldn't be a problem.
-
-3. Metal umlauts might be a problem. Accents are used sometimes with
+1. Metal umlauts might be a problem. Accents are used sometimes with
    non-latin, but very seldom and might be seen as surprising to native
    users of e.g. cyrillic, even if Åквариум exists.
    https://krebsonsecurity.com/2022/11/disneyland-malware-team-its-a-puny-world-after-all/
    is worth considering. Not entirely clear how to subdivide the
    Common script so it can be used with some scripts, not with others.
-
-4. Test suite.
