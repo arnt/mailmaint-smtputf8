@@ -5,8 +5,8 @@
 mailmaint                                                 A. Gulbrandsen
 Internet-Draft                                                     ICANN
 Intended status: Standards Track                                  J. Yao
-Expires: 8 January 2026                                            CNNIC
-                                                             7 July 2025
+Expires: 17 April 2026                                             CNNIC
+                                                         14 October 2025
 
 
                         SMTPUTF8 address syntax
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2026.
+   This Internet-Draft will expire on 17 April 2026.
 
 Copyright Notice
 
@@ -78,9 +78,10 @@ Table of Contents
    8.  References
      8.1.  Normative References
      8.2.  Informative References
-   Appendix A.  Acknowledgments
-   Appendix B.  Instructions to the RFC editor
-   Appendix C.  Open issues
+   Appendix A.  Testing
+   Appendix B.  Acknowledgments
+   Appendix C.  Instructions to the RFC editor
+   Appendix D.  Open issues
    Authors' Addresses
 
 1.  Introduction
@@ -160,42 +161,37 @@ Table of Contents
 
    Based on the above goals, the following rules are formulated:
 
-   1.  An address MUST NOT contain an a-label (e.g. xn--dmi-0na).
+   1.  An atom in an address MUST NOT be an a-label (e.g. xn--dmi-0na).
 
-   2.  An address MUST contain only code points in the PRECIS
-       IdentifierClass.
+   2.  An address MUST contain only code points in the "A", "H" and "K"
+       classes defined by [RFC5892] and [RFC8264], as well as the code
+       points allowed by the "F" class, also defined by [RFC5892], "."
+       and "@".
 
-   3.  An address MUST consist entirely of a sequence of composite
-       characters, ZWJ and ZWNJ. ("c" followed by "combining hook below"
-       is an example of a composite character, "d" is another example;
-       see [RFC6365] for the definition.)
-
-   4.  An address MOT NOT contain more than one script, disregarding
-       ASCII.  (Disregarding ASCII, the word Orléans contains only an é,
-       which is one script, namely Latin.)
+   3.  An address MUST NOT contain more than one script, when ASCII is
+       disregarded.  (For example: In the word word Orléans, Orl and ans
+       are ASCII and é is non-ASCII.  Since é is a single letter, the
+       word contains only one script.)
 
 5.  Examples
 
    example@example.com is permitted, because 1) it does not contain any
-   a-label, 2) it consists entirely of permissible code points, 4) it
-   consists of 19 composite characters, and 4) it contains no non-ASCII
-   code points at all.
+   a-label, 2) it consists entirely of permissible code points and 3) it
+   contains no non-ASCII code points at all.
 
    The address dømi@dømi.fo is permitted, because 1) it does not contain
-   any a-label, 2) does not apply, 3) it consists entirely of
-   permissible code points, 4) it consists of 12 composite characters,
-   5) does not apply and 6) it consists entirely of 'Latin' and 'Common'
-   code points (and ./@).
+   any a-label, 2) it consists entirely of code points in the "A" and
+   "K" classes and 3) it consists entirely of 'Latin' and 'Common' code
+   points (and ./@).
 
    The address U+200E '@' U+200F '.'  U+200E is not permitted, because
-   4) U+200E and U+200F are not parts of composite characters.
+   3) U+200E and U+200F are in the "C" class as defined by [RFC5892],
+   not A/H/K/F.
 
    阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
    dømi@dømi.fo is legal because it contains ASCII and Latin, but
    阿Q正传@dømi.fo is illegal becasue it contains Han 阿 and the Latin non-
    ASCII letter ø.
-
-   TODO: add more examples and rationales again.
 
 6.  IANA Considerations
 
@@ -226,14 +222,14 @@ Table of Contents
 
 8.1.  Normative References
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/rfc/rfc2119>.
-
    [RFC5322]  Resnick, P., Ed., "Internet Message Format", RFC 5322,
               DOI 10.17487/RFC5322, October 2008,
               <https://www.rfc-editor.org/rfc/rfc5322>.
+
+   [RFC5892]  Faltstrom, P., Ed., "The Unicode Code Points and
+              Internationalized Domain Names for Applications (IDNA)",
+              RFC 5892, DOI 10.17487/RFC5892, August 2010,
+              <https://www.rfc-editor.org/rfc/rfc5892>.
 
    [RFC6365]  Hoffman, P. and J. Klensin, "Terminology Used in
               Internationalization in the IETF", BCP 166, RFC 6365,
@@ -248,10 +244,16 @@ Table of Contents
               Email Headers", RFC 6532, DOI 10.17487/RFC6532, February
               2012, <https://www.rfc-editor.org/rfc/rfc6532>.
 
-   [RFC6533]  Hansen, T., Ed., Newman, C., and A. Melnikov,
-              "Internationalized Delivery Status and Disposition
-              Notifications", RFC 6533, DOI 10.17487/RFC6533, February
-              2012, <https://www.rfc-editor.org/rfc/rfc6533>.
+   [RFC8264]  Saint-Andre, P. and M. Blanchet, "PRECIS Framework:
+              Preparation, Enforcement, and Comparison of
+              Internationalized Strings in Application Protocols",
+              RFC 8264, DOI 10.17487/RFC8264, October 2017,
+              <https://www.rfc-editor.org/rfc/rfc8264>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -269,6 +271,11 @@ Table of Contents
               DOI 10.17487/RFC5891, August 2010,
               <https://www.rfc-editor.org/rfc/rfc5891>.
 
+   [RFC6533]  Hansen, T., Ed., Newman, C., and A. Melnikov,
+              "Internationalized Delivery Status and Disposition
+              Notifications", RFC 6533, DOI 10.17487/RFC6533, February
+              2012, <https://www.rfc-editor.org/rfc/rfc6533>.
+
    [RFC6854]  Leiba, B., "Update to Internet Message Format to Allow
               Group Syntax in the "From:" and "Sender:" Header Fields",
               RFC 6854, DOI 10.17487/RFC6854, March 2013,
@@ -278,7 +285,7 @@ Table of Contents
               Internationalized Email", RFC 6858, DOI 10.17487/RFC6858,
               March 2013, <https://www.rfc-editor.org/rfc/rfc6858>.
 
-   [UAX24]    Whistler, K., "Unicode Script Property", n.d.,
+   [UAX24]    Whistler, K., "Unicode Script Property", 31 July 2025,
               <https://unicode.org/reports/tr24>.
 
    [UMLAUT]   "Metal Umlaut", n.d.,
@@ -289,7 +296,21 @@ Table of Contents
               <https://html.spec.whatwg.org/multipage/input.html#email-
               state-(type=email)>.
 
-Appendix A.  Acknowledgments
+Appendix A.  Testing
+
+   This is a set of test addresses in JSON format.
+
+   Below is a verbatim copy of https://github.com/arnt/mailmaint-
+   smtputf8/tests.json as it was on (date here).  It contains a number
+   of strange and unusual code points, so cutting and pasting this may
+   not work.  Rather, it is recommended to either use the rfcstrip tool
+   or download the tests using a command such as curl
+   https://github.com/arnt/mailmaint-smtputf8/tests.json > tests.json.
+
+   Note to IETF reviewers: The tests will be included here shortly
+   before publication (and after IETF Last Call).
+
+Appendix B.  Acknowledgments
 
    The authors wish to thank John C.  Klensin, (your name here, please)
 
@@ -300,28 +321,24 @@ Appendix A.  Acknowledgments
 
    阿Q正传@ is a famous Chinese novella, 阿Q is the main character.
 
-Appendix B.  Instructions to the RFC editor
+Appendix C.  Instructions to the RFC editor
 
    Please remove all mentions of the Protocol Police before publication
    (including this sentence).
 
    Please remove the Open Issues section.
 
-Appendix C.  Open issues
+Appendix D.  Open issues
 
-   1.  PRECIS IdentifierClass?
-
-   2.  More examples.
-
-   3.  Wording to identify destiny; I think this should probably become
+   1.  Wording to identify destiny; I think this should probably become
        a proposed standard and modify a couple of RFCs, but I'm
        uncertain about some details and left that open now.
 
-   4.  More words on the relationship between this and the companion.
+   2.  More words on the relationship between this and the companion.
        There are several parallel differences, maybe this warrants a
        section of its own.
 
-   5.  Should this even mention the requirements placed on domains by
+   3.  Should this even mention the requirements placed on domains by
        IDNA, ICANN, web browsers and others?
 
 Authors' Addresses
