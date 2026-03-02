@@ -194,6 +194,11 @@ mixed in only a few cases (that are relevant to email addresses):
  - Testcase domains/addresses
  - single punctuation characters (often neutral in direction)
 
+The authors did not find any other use of mixed-direction text, and
+mixed-direction text appears to be risky, e.g. for existing software
+that does string concatenation of addresses and expects the result to
+be easy to read for users.
+
 # An oversimplified description of IDNs and the domain name system
 
 This section is informative.
@@ -203,10 +208,16 @@ IDNA2008 rules, registry rules and web browsers.
 
 For a domain such as example.com, IDNA2008 restricts both labels
 (slightly), ICANN policy restricts "com" and the .com registry's
-policy restricts "example", and the browsers' rules apply to both. For
-a domain such as beispiel.example.com, IDNA2008 and the browsers'
-rules apply to "beispiel" as well. Neither ICANN's nor the .com
-registry's rules apply to "beispiel".
+policy restricts "example", and the major browsers' rules apply to
+both. For a domain such as beispiel.example.com, IDNA2008 and the
+browsers' rules apply to "beispiel" as well. Neither ICANN's nor the
+.com registry's rules apply to "beispiel".
+
+The previous sentence bears repeating: It is possible to create a
+domain that contains any unicode codepoint, "beispiel" in the
+preceding example could contain text direction changes, or could
+consist of an unaccompanied diacritic. Registry rules only apply to
+second-level domains.
 
 ## IDNA2008
 
@@ -215,6 +226,8 @@ is to be practically usable, it needs to be usable with IDNA2008,
 which restricts the set of code points slightly.
 
 ## Registry rules
+
+Some TLD registries use a common set of rules called LGR.
 
 The LGR, Label Generation Rules, are a set of rules largely developed
 by per-language and per-script committees and collected by ICANN. Most
@@ -252,7 +265,8 @@ for interoperable email addresses.
 be interoperable it MUST also match the grammar specified by the W3C
 WHATWG {{TYPE=EMAIL}} spec.
 
-3. An address MUST conform to the PRECIS IdentifierClass.
+3. An address MUST conform to the PRECIS IdentifierClass and use
+the NFC form.
 
 4. If an address contains any right-to-left code points, then it MAY
 contain ASCII digits and MUST NOT contain any other left-to-right code
@@ -270,6 +284,10 @@ following conditions MUST apply:
 
    3. All code points are have the script properties Han or
       Common, or are ASCII.
+
+The above rules do not modify the permitted length as specified in
+(RFC goes here, perhaps still 5322). The maximum length remains 64
+bytes, which will often be less than 64 unicode codepoints.
 
 # Examples
 

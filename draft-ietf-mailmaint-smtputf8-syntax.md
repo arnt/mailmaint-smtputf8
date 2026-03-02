@@ -145,7 +145,9 @@ Based on the above goals, the following rules are formulated:
 
 2. An address MUST contain only code points in the "A", "H" and "K"
 classes defined by [RFC5892] and [RFC8264], as well as the code points
-allowed by the "F" class, also defined by [RFC5892], "." and "@".
+allowed by the "F" class, also defined by [RFC5892], "." and "@". (A
+contains letters and digits, H contains join controls, K contains
+ASCII and F contains a few exceptions.)
 
 3. An address MUST NOT contain more than one script, when ASCII is
 disregarded. (For example: In the word word Orléans, Orl and ans are
@@ -168,8 +170,8 @@ U+200E and U+200F are in the "C" class as defined by [RFC5892], not A/H/K/F.
 
 阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
 dømi@dømi.fo is legal because it contains ASCII and Latin, but
-阿Q正传@dømi.fo is illegal becasue it contains Han 阿 and the Latin
-non-ASCII letter ø.
+阿Q正传@dømi.fo is illegal because it contains both Han (阿) and Latin
+non-ASCII (ø).
 
 # IANA Considerations {#IANA}
 
