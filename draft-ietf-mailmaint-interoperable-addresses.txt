@@ -5,8 +5,8 @@
 mailmaint                                                 A. Gulbrandsen
 Internet-Draft                                                     ICANN
 Intended status: Standards Track                                  J. Yao
-Expires: 1 June 2026                                               CNNIC
-                                                        28 November 2025
+Expires: 3 September 2026                                          CNNIC
+                                                            2 March 2026
 
 
                Interoperable Email Addresses for SMTPUTF8
@@ -52,11 +52,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 June 2026.
+   This Internet-Draft will expire on 3 September 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -224,6 +224,11 @@ Table of Contents
 
    *  single punctuation characters (often neutral in direction)
 
+   The authors did not find any other use of mixed-direction text, and
+   mixed-direction text appears to be risky, e.g. for existing software
+   that does string concatenation of addresses and expects the result to
+   be easy to read for users.
+
 5.  An oversimplified description of IDNs and the domain name system
 
    This section is informative.
@@ -233,10 +238,16 @@ Table of Contents
 
    For a domain such as example.com, IDNA2008 restricts both labels
    (slightly), ICANN policy restricts "com" and the .com registry's
-   policy restricts "example", and the browsers' rules apply to both.
-   For a domain such as beispiel.example.com, IDNA2008 and the browsers'
-   rules apply to "beispiel" as well.  Neither ICANN's nor the .com
-   registry's rules apply to "beispiel".
+   policy restricts "example", and the major browsers' rules apply to
+   both.  For a domain such as beispiel.example.com, IDNA2008 and the
+   browsers' rules apply to "beispiel" as well.  Neither ICANN's nor the
+   .com registry's rules apply to "beispiel".
+
+   The previous sentence bears repeating: It is possible to create a
+   domain that contains any unicode codepoint, "beispiel" in the
+   preceding example could contain text direction changes, or could
+   consist of an unaccompanied diacritic.  Registry rules only apply to
+   second-level domains.
 
 5.1.  IDNA2008
 
@@ -245,6 +256,8 @@ Table of Contents
    which restricts the set of code points slightly.
 
 5.2.  Registry rules
+
+   Some TLD registries use a common set of rules called LGR.
 
    The LGR, Label Generation Rules, are a set of rules largely developed
    by per-language and per-script committees and collected by ICANN.
@@ -283,7 +296,8 @@ Table of Contents
        be interoperable it MUST also match the grammar specified by the
        W3C WHATWG [TYPE_EMAIL] spec.
 
-   3.  An address MUST conform to the PRECIS IdentifierClass.
+   3.  An address MUST conform to the PRECIS IdentifierClass and use the
+       NFC form.
 
    4.  If an address contains any right-to-left code points, then it MAY
        contain ASCII digits and MUST NOT contain any other left-to-right
@@ -302,6 +316,10 @@ Table of Contents
 
        3.  All code points are have the script properties Han or Common,
            or are ASCII.
+
+   The above rules do not modify the permitted length as specified in
+   (RFC goes here, perhaps still 5322).  The maximum length remains 64
+   bytes, which will often be less than 64 unicode codepoints.
 
 7.  Examples
 

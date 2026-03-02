@@ -5,8 +5,8 @@
 mailmaint                                                 A. Gulbrandsen
 Internet-Draft                                                     ICANN
 Intended status: Standards Track                                  J. Yao
-Expires: 1 June 2026                                               CNNIC
-                                                        28 November 2025
+Expires: 3 September 2026                                          CNNIC
+                                                            2 March 2026
 
 
                         SMTPUTF8 address syntax
@@ -50,11 +50,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 June 2026.
+   This Internet-Draft will expire on 3 September 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -166,7 +166,8 @@ Table of Contents
    2.  An address MUST contain only code points in the "A", "H" and "K"
        classes defined by [RFC5892] and [RFC8264], as well as the code
        points allowed by the "F" class, also defined by [RFC5892], "."
-       and "@".
+       and "@".  (A contains letters and digits, H contains join
+       controls, K contains ASCII and F contains a few exceptions.)
 
    3.  An address MUST NOT contain more than one script, when ASCII is
        disregarded.  (For example: In the word word Orléans, Orl and ans
@@ -190,8 +191,8 @@ Table of Contents
 
    阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
    dømi@dømi.fo is legal because it contains ASCII and Latin, but
-   阿Q正传@dømi.fo is illegal becasue it contains Han 阿 and the Latin non-
-   ASCII letter ø.
+   阿Q正传@dømi.fo is illegal because it contains both Han (阿) and Latin
+   non-ASCII (ø).
 
 6.  IANA Considerations
 
