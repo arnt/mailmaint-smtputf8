@@ -3,7 +3,19 @@
 	"address": "example@example.com",
 	"valid": true,
 	"interoperable": true,
-	"comment": "some unit test frameworks permit specifying a reason for a test"
+	"comment": "plain ASCII, the simplest interoperable address (some unit test frameworks let you record a reason, as in this comment)"
+    },
+    {
+	"address": "Example@example.com",
+	"valid": true,
+	"interoperable": true,
+	"comment": "case is preserved, not folded: the PRECIS IdentifierClass keeps upper and lower case distinct"
+    },
+    {
+	"address": "dømi@dømi.fo",
+	"valid": true,
+	"interoperable": true,
+	"comment": "all Latin, ø included; only the xn-- form of a domain is banned, the u-label is fine"
     },
     {
 	"address": "example@xn--gr-zia.example.com",
@@ -13,75 +25,151 @@
     {
 	"address": "xn--gr-zia@example.com",
 	"valid": false,
-	"comment": "an a-label (xn--...) is not permitted in the localpart"
+	"comment": "an a-label is not permitted in the localpart either"
     },
     {
 	"address": "com.xn--gr-zia@example.com",
 	"valid": false,
-	"comment": "an a-label (xn--...) is not permitted in the localpart"
+	"comment": "an a-label is banned in any atom, not just the first"
     },
     {
-	"address": "..@example.com",
-	"valid": true,
-	"interoperable": false,
-	"comment": "WHATWG input type=email specification bans .."
+	"address": "XN--GR-ZIA@example.com",
+	"valid": false,
+	"comment": "the ACE prefix is case-insensitive, so XN-- is an a-label too"
     },
     {
-	"address": "\u0627@example.com",
-	"valid": true,
-	"interoperable": false,
-	"comment": "contains both right-to-left nondigits and something left-to-right"
-    },
-    {
-	"address": "\u0627@2\u0627.\u0627",
+	"address": "xn-gr@example.com",
 	"valid": true,
 	"interoperable": true,
-	"comment": "contains right-to-left digits and something left-to-right"
+	"comment": "one hyphen, not two: xn- is not the ACE prefix, so this is an ordinary localpart"
     },
     {
-	"address": "\u200e4@example.com",
+	"address": "\u200E4@example.com",
 	"valid": false,
-	"comment": "left-to-right marks are not permitted by PRECIS"
+	"comment": "U+200E LEFT-TO-RIGHT MARK is disallowed by PRECIS (unicode class Cf, precis C)"
     },
     {
-	"address": "\u061c@example.com",
+	"address": "\u061C@example.com",
 	"valid": false,
-	"comment": "061c is forbidden by PRECIS (unicode class Cf, precis C)"
+	"comment": "U+061C ARABIC LETTER MARK is disallowed by PRECIS (unicode class Cf, precis C)"
+    },
+    {
+	"address": "\u200E@\u200F.\u200E",
+	"valid": false,
+	"comment": "U+200E and U+200F are bidi controls, disallowed by PRECIS"
+    },
+    {
+	"address": "ali\u202Emoc.elpmaxe@kravdraa.ec",
+	"valid": false,
+	"comment": "U+202E RIGHT-TO-LEFT OVERRIDE in the localpart makes the address render as alice.aardvark@example.com; the real domain kravdraa.ec stays clean ASCII and aligns under DKIM/DMARC, but the override is class C, so the address is invalid"
+    },
+    {
+	"address": "🐪@example.com",
+	"valid": false,
+	"comment": "U+1F42A CAMEL is a symbol, not a letter or digit, so it is outside the permitted repertoire"
+    },
+    {
+	"address": "IВM@dømi.fo",
+	"valid": false,
+	"comment": "two non-ASCII scripts: U+0412 (В) is Cyrillic and ø is Latin"
+    },
+    {
+	"address": "阿Q正传@dømi.fo",
+	"valid": false,
+	"comment": "two non-ASCII scripts: 阿 is Han and ø is Latin"
+    },
+    {
+	"address": "Толстой@example.com",
+	"valid": true,
+	"interoperable": false,
+	"comment": "Cyrillic localpart with an ASCII domain is valid, but only Han (not Cyrillic) may be freely mixed with ASCII, so it is not interoperable"
+    },
+    {
+	"address": "名字@example.com",
+	"valid": true,
+	"interoperable": true,
+	"comment": "Han localpart with an ASCII domain is interoperable: Han may be combined with ASCII"
     },
     {
 	"address": "阿Q正传@阿Q正传.example",
 	"valid": true,
 	"interoperable": true,
-	"comment": "Han+ASCII is permitted"
+	"comment": "Han plus ASCII (the Latin Q and example) is interoperable"
     },
     {
-	"address": "Толстой@example.com",
-	"valid": false,
-	"comment": "valid, sadly, because ASCII+Cyrillic is permitted"
+	"address": "名字@例子.中国",
+	"valid": true,
+	"interoperable": true,
+	"comment": "all Han plus the ASCII dot: a single non-ASCII script is interoperable"
     },
     {
-	"address": "IВM@dømi.fo",
-	"valid": false,
-	"comment": "forbidden because of different scripts (В is Cyrillic and ø is Latin)"
+	"address": "info@例子.中国",
+	"valid": true,
+	"interoperable": true,
+	"comment": "ASCII localpart with a single-script (Han) domain is interoperable"
     },
     {
-	"address": "xn--gr-zia@example.com",
+	"address": "उदाहरण@उदाहरण.भारत",
+	"valid": true,
+	"interoperable": true,
+	"comment": "all Devanagari, including its combining vowel signs: a single script is interoperable"
+    },
+    {
+	"address": "gøril@example.com",
+	"valid": true,
+	"interoperable": true,
+	"comment": "Latin localpart (ø) with an ASCII domain: one script, interoperable"
+    },
+    {
+	"address": "\u0627@2\u0627.\u0627",
+	"valid": true,
+	"interoperable": true,
+	"comment": "Arabic (U+0627) with ASCII digits: the only left-to-right code points are digits, which is allowed"
+    },
+    {
+	"address": "\u0627@example.com",
+	"valid": true,
+	"interoperable": false,
+	"comment": "Arabic (U+0627, right-to-left) mixed with left-to-right letters is valid but not interoperable"
+    },
+    {
+	"address": "café@example.com",
+	"valid": true,
+	"interoperable": true,
+	"comment": "café in NFC (precomposed U+00E9) is interoperable"
+    },
+    {
+	"address": "cafe\u0301@example.com",
+	"valid": true,
+	"interoperable": false,
+	"comment": "the same café in NFD (e + U+0301 combining acute), one code point longer; valid, but not interoperable because it is not NFC"
+    },
+    {
+	"address": "..@example.com",
+	"valid": true,
+	"interoperable": false,
+	"comment": "two ASCII dots are valid code points, but WHATWG type=email forbids the empty atoms"
+    },
+    {
+	"address": "\"john.doe\"@example.com",
+	"valid": true,
+	"interoperable": false,
+	"comment": "a quoted-string localpart is valid RFC5322 and uses only ASCII, but WHATWG type=email has no quoting, so it is not interoperable"
+    },
+    {
+	"address": "cel·la@example.com",
+	"valid": true,
+	"interoperable": true,
+	"comment": "U+00B7 between two l's is the Catalan ela geminada, permitted in context (RFC5892 A.3)"
+    },
+    {
+	"address": "cex·xa@example.com",
 	"valid": false,
-	"comment": "an a-label (xn--...) is not permitted in the localpart"
-     },
- {
-   "address": "xn--gr-zia@example.com",
-     "valid": false,
-     "comment": "an a-label (xn--...) is not permitted in the localpart"
-     },
- {
-   "address": "xn--gr-zia@example.com",
-     "valid": false,
-     "comment": "an a-label (xn--...) is not permitted in the localpart"
-     },
- {
-   "address": "xn--gr-zia@example.com",
-     "valid": false,
-     "comment": "an a-label (xn--...) is not permitted in the localpart"
-     },
- ]
+	"comment": "U+00B7 is only permitted between two l's (RFC5892 A.3); here it is not"
+    },
+    {
+	"address": "\u0660\u06F0@example.com",
+	"valid": false,
+	"comment": "Arabic-Indic (U+0660) and Extended Arabic-Indic (U+06F0) digits must not be mixed (RFC5892 A.8 and A.9)"
+    }
+]
