@@ -8,7 +8,7 @@ wg: mailmaint
 
 docname: draft-ietf-mailmaint-smtputf8-syntax-latest
 
-title: SMTPUTF8 address syntax
+title: Deciding Whether to Display an SMTPUTF8 Email Address
 lang: en
 kw:
   - email
@@ -29,7 +29,7 @@ author:
   email: yaojk@cnnic.cn
 
 normative:
-  RFC5322:
+  I-D.ietf-emailcore-rfc5322bis:
   RFC5892:
   RFC6365:
   RFC6530:
@@ -58,15 +58,19 @@ informative:
 
 --- abstract
 
-This document specifies rules for email addresses that are flexible
-enough to express the addresses typically used with SMTPUTF8, while
-avoiding confusing or risky elements.
+This document recommends a best current practice for software that
+displays an email address obtained from a potentially malevolent
+source, such as the sender of an email message. It defines a set of
+rules, simple enough to require little code, that exclude addresses
+whose display could mislead the reader. An address that satisfies the
+rules is safe to display in its native Unicode form, while one that
+does not should be shown in a safer form.
 
-This is one of a pair of documents: This is simple to implement,
-contains only globally viable rules and is intended to be usable for
-software such an MTA. Its companion defines has more complex rules,
-takes regional usage into account and aims to allow only addresses
-that are readable and cut-and-pastable in some community.
+This is one of a pair of documents. This one is simple to implement
+and contains only globally viable rules. Its companion has more
+complex rules, takes regional usage into account, and describes
+addresses that can be read by some community and cut-and-pasted in
+some locale.
 
 --- middle
 
@@ -81,26 +85,30 @@ domain parts by using encoded domain parts in the SMTP transaction
 
 The email address syntax extension is in {{RFC6532}}, and allows
 almost all UTF8 strings as localparts. While this certainly allows
-everything users want to use, it is also flexible enought to allow
+everything users want to use, it is also flexible enough to allow
 many things that users and implementers find surprising and sometimes
 worrying.
 
-The flexibility has caused considerable reluctance to support the full
-syntax in contexts such as web form address validation.
+Displaying such an address verbatim can be risky, because a possibly
+hostile sender chooses it. For example, the sender might register
+kravdraa.ec and send mail from ali U+202E moc.elpmaxe@kravdraa.ec,
+which a trustful receiver might display on-screen as
+alice.aardvark@example.com, with perfect DKIM/DMARC alignment.
 
-This document attempts to describe rules that:
+This document describes rules that identify the addresses that are
+safe to display, and recommends that software decline to display the
+rest in their native form. The rules —
 
-1. includes the addresses that users generally want to use for
-themselves and organizations want to provision for their employees.
+1. include the addresses that users generally want to use for
+themselves and that organizations want to provision for their
+staff;
 
-2. excludes things that have been described as security risks.
+2. exclude things that have been described as security risks;
 
-3. Looks safe at first glance to implementers (including ones with
-little unicode expertise) and are fairly easy to use in unit tests.
+3. are visibly safe to implementers (including ones with little
+Unicode expertise) and are easy to use in unit tests;
 
-4. Contain no regional rules.
-
-These goals are somewhat aspirational.
+4. contain no regional rules, for simplicity.
 
 # Requirements Language
 
@@ -139,7 +147,9 @@ and three Han code points.
 
 # Rules
 
-Based on the above goals, the following rules are formulated:
+
+Based on the above goals, the following rules identify an address as
+safe to display. An address is safe only if it satisfies all three.
 
 1. An atom in an address MUST NOT be an a-label (e.g. xn--dmi-0na).
 
@@ -173,6 +183,26 @@ dømi@dømi.fo is legal because it contains ASCII and Latin, but
 阿Q正传@dømi.fo is illegal because it contains both Han (阿) and Latin
 non-ASCII (ø).
 
+# Displaying an address from an untrusted source {#practice}
+
+Software that displays an email address obtained from a potentially
+malevolent source faces the risks described in {{SECURITY}}. The
+originator fields of an inbound message are the common case, but the
+same applies wherever an untrusted address is displayed to human
+users: address books populated from incoming mail, quoted text, search
+results and logs shown in a user interface.
+
+An address that satisfies the rules above MAY be displayed in its
+native Unicode form.
+
+An address that does not satisfy the rules SHOULD NOT be displayed in
+its native Unicode form. The software SHOULD instead display it in a
+form that cannot mislead the reader, such as the all-ASCII a-label form
+of {{RFC5890}} for the domain, or with the offending code points shown
+in an unambiguous escaped notation.
+
+This practice applies only to addresses from untrusted sources.
+
 # IANA Considerations {#IANA}
 
 This document does not require any actions from the IANA.
@@ -194,6 +224,11 @@ document) mixes left-to-right and right-to-left writing, parts of both
 the localpart and the domain part can be rendered on the same side of
 the '@'. This can create the appearance that a different domain signed
 the message.
+
+This is why {{practice}} recommends against displaying a
+non-conforming address in its native form: the rules are the line
+between an address that a reader can trust at a glance and one that a
+hostile sender may have designed.
 
 The rules in this document permit a number of code points that can
 make it difficult to cut and paste.
