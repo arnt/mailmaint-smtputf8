@@ -2,13 +2,14 @@
 stand_alone: true
 ipr: trust200902
 cat: std
+updates: 6532
 submissiontype: IETF
 area: "Applications and Real-Time"
 wg: mailmaint
 
 docname: draft-ietf-mailmaint-smtputf8-syntax-latest
 
-title: Deciding Whether to Display an SMTPUTF8 Email Address
+title: SMTPUTF8 Email Addresses
 lang: en
 kw:
   - email
@@ -30,6 +31,7 @@ author:
 
 normative:
   I-D.ietf-emailcore-rfc5322bis:
+  RFC5890:
   RFC5892:
   RFC6365:
   RFC6530:
@@ -58,13 +60,9 @@ informative:
 
 --- abstract
 
-This document recommends a best current practice for software that
-displays an email address obtained from a potentially malevolent
-source, such as the sender of an email message. It defines a set of
-rules, simple enough to require little code, that exclude addresses
-whose display could mislead the reader. An address that satisfies the
-rules is safe to display in its native Unicode form, while one that
-does not should be shown in a safer form.
+RFC 6532 extends the internet email format to allow UTF8 in many
+contexts. This document restricts the set of allowed addresses in
+header fields slightly, and thereby simplifies use of these addresses.
 
 This is one of a pair of documents. This one is simple to implement
 and contains only globally viable rules. Its companion has more
@@ -85,30 +83,10 @@ domain parts by using encoded domain parts in the SMTP transaction
 
 The email address syntax extension is in {{RFC6532}}, and allows
 almost all UTF8 strings as localparts. While this certainly allows
-everything users want to use, it is also flexible enough to allow
-many things that users and implementers find surprising and sometimes
-worrying.
-
-Displaying such an address verbatim can be risky, because a possibly
-hostile sender chooses it. For example, the sender might register
-kravdraa.ec and send mail from ali U+202E moc.elpmaxe@kravdraa.ec,
-which a trustful receiver might display on-screen as
-alice.aardvark@example.com, with perfect DKIM/DMARC alignment.
-
-This document describes rules that identify the addresses that are
-safe to display, and recommends that software decline to display the
-rest in their native form. The rules —
-
-1. include the addresses that users generally want to use for
-themselves and that organizations want to provision for their
-staff;
-
-2. exclude things that have been described as security risks;
-
-3. are visibly safe to implementers (including ones with little
-Unicode expertise) and are easy to use in unit tests;
-
-4. contain no regional rules, for simplicity.
+everything users want to use, it is also flexible enough to allow many
+things that users and implementers find surprising and sometimes
+worrying. For example, the domain extracted by code may not match that
+shown to users on-screen.
 
 # Requirements Language
 
@@ -122,7 +100,7 @@ except that some are assigned to "Common" or a few other special
 values. Fraktur and /etc/rc.local aren't scripts in this document, but
 Latin is.
 
-Latin refers those code points that have the script property "Latin"
+Latin refers to those code points that have the script property "Latin"
 in Unicode. Orléans in France and Münster in Germany both have Latin
 names in this document. It also refers to combinations of those code
 points and combining characters, and to strings that contain no code
@@ -145,22 +123,26 @@ non-ASCII. 中国 is a Han string in this document, but 阿Q正传 is
 neither a Latin string nor a Han string, because it contains a Latin Q
 and three Han code points.
 
+The term a-label is defined in {{RFC5890}} section 2.3.2.1.
+
 # Rules
 
-
-Based on the above goals, the following rules identify an address as
-safe to display. An address is safe only if it satisfies all three.
+The following three rules apply to the
+{{I-D.ietf-emailcore-rfc5322bis}} mailbox production, as indirectly
+extended by {{RFC6532}}.
 
 1. An atom in an address MUST NOT be an a-label (e.g. xn--dmi-0na).
 
 2. An address MUST contain only code points in the "A", "H" and "K"
-classes defined by [RFC5892] and [RFC8264], as well as the code points
-allowed by the "F" class, also defined by [RFC5892], "." and "@". (A
-contains letters and digits, H contains join controls, K contains
-ASCII and F contains a few exceptions.)
+classes, the code points allowed by the "F" class, and "." and "@".
+These classes are defined in {{RFC8264}} section 9: A (LetterDigits)
+in 9.1, H (JoinControl) in 9.8, K (ASCII7) in 9.11 and F (Exceptions)
+in 9.6. All but K are also defined in {{RFC5892}} section 2 (2.1, 2.8
+and 2.6 respectively). (A contains letters and digits, H contains join
+controls, K contains ASCII and F contains a few exceptions.)
 
 3. An address MUST NOT contain more than one script, when ASCII is
-disregarded. (For example: In the word word Orléans, Orl and ans are
+disregarded. (For example: In the word Orléans, Orl and ans are
 ASCII and é is non-ASCII. Since é is a single letter, the word
 contains only one script.)
 
@@ -175,33 +157,14 @@ any a-label, 2) it consists entirely of code points in the "A" and "K"
 classes and 3) it consists entirely of 'Latin' and 'Common' code
 points (and ./@).
 
-The address U+200E '@' U+200F '.' U+200E is not permitted, because 3)
-U+200E and U+200F are in the "C" class as defined by [RFC5892], not A/H/K/F.
+The address U+200E '@' U+200F '.' U+200E is not permitted, because 2)
+U+200E and U+200F are in the "C" class (IgnorableProperties, {{RFC5892}}
+section 2.3), not A/H/K/F.
 
 阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
 dømi@dømi.fo is legal because it contains ASCII and Latin, but
-阿Q正传@dømi.fo is illegal because it contains both Han (阿) and Latin
+阿Q正传@dømi.fo is not, because it contains both Han (阿) and Latin
 non-ASCII (ø).
-
-# Displaying an address from an untrusted source {#practice}
-
-Software that displays an email address obtained from a potentially
-malevolent source faces the risks described in {{SECURITY}}. The
-originator fields of an inbound message are the common case, but the
-same applies wherever an untrusted address is displayed to human
-users: address books populated from incoming mail, quoted text, search
-results and logs shown in a user interface.
-
-An address that satisfies the rules above MAY be displayed in its
-native Unicode form.
-
-An address that does not satisfy the rules SHOULD NOT be displayed in
-its native Unicode form. The software SHOULD instead display it in a
-form that cannot mislead the reader, such as the all-ASCII a-label form
-of {{RFC5890}} for the domain, or with the offending code points shown
-in an unambiguous escaped notation.
-
-This practice applies only to addresses from untrusted sources.
 
 # IANA Considerations {#IANA}
 
@@ -209,29 +172,14 @@ This document does not require any actions from the IANA.
 
 # Security Considerations {#SECURITY}
 
-When a program renders a unicode string on-screen or audibly and
-includes a substring supplied by a potentially malevolent source, the
-included substring can affect the rendering of a surprisingly large
-part of the overall string.
-
-This document describes rules that make it difficult for an attacker
-to use email addresses for such an attack. Implementers should be
-aware of other possible vectors for the same kind of attack, such as
-subject fields and email address display-names.
-
-If an address is signed using DKIM and (against the rules of this
-document) mixes left-to-right and right-to-left writing, parts of both
-the localpart and the domain part can be rendered on the same side of
-the '@'. This can create the appearance that a different domain signed
-the message.
-
-This is why {{practice}} recommends against displaying a
-non-conforming address in its native form: the rules are the line
-between an address that a reader can trust at a glance and one that a
-hostile sender may have designed.
+When a program renders a non-ASCII email address string on-screen or
+stores it as a string (e.g. in a system log file), the address shown
+to the eventual human may not be as intended. One possible way to
+diminish the risk is to replace impermissible code points with U+FFFD,
+REPLACEMENT CHARACTER. There are also other options.
 
 The rules in this document permit a number of code points that can
-make it difficult to cut and paste.
+make an address difficult to cut and paste.
 
 --- back
 
@@ -260,7 +208,7 @@ The authors wish to thank John C. Klensin, (your name here, please)
 Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
 examples and documentation.
 
-阿Q正传@ is a famous Chinese novella, 阿Q is the main character.
+阿Q正传 is a famous Chinese novella, 阿Q is the main character.
 
 # Instructions to the RFC editor
 
@@ -281,3 +229,5 @@ a section of its own.
 
 5. Should this even mention the requirements placed on domains by
 IDNA, ICANN, web browsers and others?
+
+6. SHOULD or MUST not contain a-labels?
