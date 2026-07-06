@@ -4,35 +4,36 @@
 <meta charset="utf-8">
 <meta content="Common,Han,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>SMTPUTF8 address syntax</title>
+<title>SMTPUTF8 Email Addresses</title>
 <meta content="Arnt Gulbrandsen" name="author">
 <meta content="Jiankang Yao" name="author">
 <meta content="
-       This document specifies rules for email addresses that are flexible
-enough to express the addresses typically used with SMTPUTF8, while
-avoiding confusing or risky elements. 
-       This is one of a pair of documents: This is simple to implement,
-contains only globally viable rules and is intended to be usable for
-software such an MTA. Its companion defines has more complex rules,
-takes regional usage into account and aims to allow only addresses
-that are readable and cut-and-pastable in some community. 
+       RFC 6532 extends the internet email format to allow UTF8 in many
+contexts. This document restricts the set of allowed addresses in
+header fields slightly, and thereby simplifies use of these addresses. 
+       This is one of a pair of documents. This one is simple to implement
+and contains only globally viable rules. Its companion has more
+complex rules, takes regional usage into account, and describes
+addresses that can be read by some community and cut-and-pasted in
+some locale. 
     " name="description">
-<meta content="xml2rfc 3.31.0" name="generator">
+<meta content="xml2rfc 3.34.0" name="generator">
 <meta content="email" name="keyword">
 <meta content="draft-ietf-mailmaint-smtputf8-syntax-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.31.0
-    Python 3.12.12
-    ConfigArgParse 1.7
+  xml2rfc 3.34.0
+    Python 3.14.5
+    ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 6.0.2
-    platformdirs 4.5.1
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.10.0
     pycountry 24.6.1
     PyYAML 6.0.3
-    requests 2.32.5
-    wcwidth 0.3.0
+    requests 2.33.1
+    wcwidth 0.8.2
 -->
 <link href="draft-ietf-mailmaint-smtputf8-syntax.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -299,16 +300,19 @@ h1, h2, h3, h4, h5, h6 {
   font-size-adjust: 0.5;
   color: var(--title-color);
 }
-h1#title {
-  font-size: 32px;
-  line-height: 40px;
-  clear: both;
-}
-h1#title, h1#rfcnum {
-  margin: 1.5em 0 0.2em;
-}
-h1#rfcnum + h1#title {
-  margin: 0.2em 0;
+h1 {
+  &#title {
+    font-size: 32px;
+    line-height: 40px;
+    clear: both;
+    margin: 1.5em 0 0.2em;
+  }
+  &#rfcnum {
+    margin: 1.5em 0 0.2em;
+    & + h1#title {
+      margin: 0.2em 0;
+    }
+  }
 }
 
 h1, h2, h3 {
@@ -328,10 +332,10 @@ h4, h5, h6 {
 #abstract+p {
   font-size: 18px;
   line-height: 24px;
-}
-#abstract+p code, #abstract+p samp, #abstract+p tt {
-  font-size: 16px;
-  line-height: 0;
+  & code, & samp, & tt {
+    font-size: 16px;
+    line-height: 0;
+  }
 }
 
 p {
@@ -342,59 +346,59 @@ p {
 div {
   margin: 0;
 }
-.alignRight.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignRight.art-text pre {
-  padding: 0;
-  width: auto;
-}
 .alignRight {
   margin: 1em 0;
-}
-.alignRight > *:first-child {
-  border: none;
-  margin: 0;
-  float: right;
-  clear: both;
-}
-.alignRight > *:nth-child(2) {
-  clear: both;
-  display: block;
-  border: none;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    margin: 0;
+    float: right;
+    clear: both;
+  }
+  & > *:nth-child(2) {
+    clear: both;
+    display: block;
+    border: none;
+  }
 }
 svg {
   display: block;
-}
-/* font-family isn't space-separated, but =~ will have to do */
-svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
-  font-family: var(--font-mono);
-}
-.alignCenter.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignCenter.art-text pre {
-  padding: 0;
-  width: auto;
+  /* font-family isn't space-separated, but =~ will have to do */
+  &[font-family~="monospace" i], & [font-family~="monospace" i] {
+    font-family: var(--font-mono);
+  }
 }
 .alignCenter {
   margin: 1em 0;
-}
-.alignCenter > *:first-child {
-  border: none;
-  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
-     support flexbox yet.
-  */
-  display: table;
-  margin: 0 auto;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+       support flexbox yet.
+    */
+    display: table;
+    margin: 0 auto;
+  }
 }
 
 /* lists */
@@ -432,26 +436,25 @@ dl {
     --indent: 5ch;
     & > dt {
       min-width: calc(var(--indent) - 2ch);
+      float: none;
     }
-  }
-  &.olPercent > dt {
-    float: none;
   }
 
   dl > dd > & {
     margin-top: 0.5em;
     margin-bottom: 0;
   }
-}
-dl:not(.dlNewline) > dt {
-  float: left;
-  margin-right: 2ch;
-  min-width: 8ch;
-}
-dl > dd {
-  margin-bottom: .8em;
-  margin-left: var(--indent) !important; /* stupid element overrides */
-  min-height: 2ex;
+
+  &:not(.dlNewline) > dt {
+    float: left;
+    margin-right: 2ch;
+    min-width: 8ch;
+  }
+  & > dd {
+    margin-bottom: .8em;
+    margin-left: var(--indent) !important; /* stupid element overrides */
+    min-height: 2ex;
+  }
 }
 :is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0;
@@ -467,20 +470,22 @@ dl > dd {
 }
 
 /* links */
-a, a[href].selfRef:hover {
+a {
   text-decoration: none;
+  &[href] {
+    color: var(--link-color);
+    &:hover { text-decoration: underline; }
+    &.selfRef {
+      color: var(--text-color);
+      &:hover {
+        text-decoration: none;
+        background-color: var(--highlight-color);
+      }
+    }
+  }
 }
-a[href] {
-  color: var(--link-color);
-}
-a[href].selfRef, .iref + a[href].internal {
+.iref + a[href].internal {
   color: var(--text-color);
-}
-a[href]:hover {
-  text-decoration: underline;
-}
-a[href].selfRef:hover {
-  background-color: var(--highlight-color);
 }
 a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
   white-space: nowrap;
@@ -516,9 +521,9 @@ img {
 figure {
   margin: 0.5em 0;
   padding: 0;
-}
-figure blockquote {
-  margin: 0.8em 0.4em 0.4em;
+  & blockquote {
+    margin: 0.8em 0.4em 0.4em;
+  }
 }
 figcaption, caption {
   font-style: italic;
@@ -528,17 +533,19 @@ figcaption, caption {
 }
 @media screen {
   /* Auto-collapse boilerplate. */
-  :is(#status-of-memo, #copyright) p {
-    margin: -2px 0;
-    max-height: 0;
-    transition: max-height 2s ease, margin 0.5s ease 0.5s;
-    overflow: hidden;
-  }
-  :is(#status-of-memo, #copyright):hover p,
-  :is(#status-of-memo, #copyright) h2:target ~ p {
-    margin: 0.5em 0;
-    max-height: 500px;
-    overflow: auto;
+  :is(#status-of-memo, #copyright) {
+    & p {
+      margin: -2px 0;
+      max-height: 0;
+      transition: max-height 2s ease, margin 0.5s ease 0.5s;
+      overflow: hidden;
+    }
+    &:hover p,
+    & h2:target ~ p {
+      margin: 0.5em 0;
+      max-height: 500px;
+      overflow: auto;
+    }
   }
   pre, svg {
     display: inline-block;
@@ -588,25 +595,17 @@ table {
   max-width: 100%;
   margin: 0 0 1em;
   border-collapse: collapse;
-}
-table.right {
-  margin-left: auto;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-table.left {
-  margin-right: auto;
-}
-table .text-left {
-  text-align: left;
-}
-table .text-center {
-  text-align: center;
-}
-table .text-right {
-  text-align: right;
+  &.right { margin-left: auto; }
+  &.center { margin-left: auto; margin-right: auto; }
+  &.left { margin-right: auto; }
+  & .text-left { text-align: left; }
+  & .text-center { text-align: center; }
+  & .text-right { text-align: right; }
+  & caption {
+    margin: 0;
+    padding: 3px 0 3px 1em;
+  }
+  & p { margin: 0; }
 }
 
 thead, tbody {
@@ -626,13 +625,6 @@ th {
 :is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
 }
-table caption {
-  margin: 0;
-  padding: 3px 0 3px 1em;
-}
-table p {
-  margin: 0;
-}
 
 /* pilcrow */
 a.pilcrow {
@@ -643,18 +635,16 @@ a.pilcrow {
     color: var(--pilcrow-weak);
     &:hover { text-decoration: none; }
   }
-}
-@media not print {
-  :hover > a.pilcrow, a.pilcrow:focus {
-    opacity: 1;
+  @media not print {
+    :hover > &, &:focus {
+      opacity: 1;
+    }
+    &[href]:hover {
+      color: var(--pilcrow-strong);
+      background-color: transparent;
+    }
   }
-  a.pilcrow[href]:hover {
-    color: var(--pilcrow-strong);
-    background-color: transparent;
-  }
-}
-@media print {
-  a.pilcrow {
+  @media print {
     display: none;
   }
 }
@@ -713,9 +703,9 @@ sub, sup {
   font-size: 0.9em;
   font-style: italic;
   margin-top: 2em;
-}
-.docInfo .prepared {
-  float: right;
+  & .prepared {
+    float: right;
+  }
 }
 
 /* table of contents */
@@ -805,23 +795,27 @@ hr.addr {
   max-width: calc(100% - 16px);
 }
 @media (min-width: 500px) {
-  #authors-addresses > section {
-    column-count: 2;
-    column-gap: 20px;
-  }
-  #authors-addresses > section > h2 {
-    column-span: all;
-  }
-  /* hack for break-inside: avoid-column */
-  #authors-addresses address {
-    display: inline-block;
-    break-inside: avoid-column;
+  #authors-addresses {
+    & > section {
+      column-count: 2;
+      column-gap: 20px;
+    }
+    & > section > h2 {
+      column-span: all;
+    }
+    /* hack for break-inside: avoid-column */
+    & address {
+      display: inline-block;
+      break-inside: avoid-column;
+    }
   }
 }
 
 /* Comments */
-.rfcEditorRemove p:first-of-type {
-  font-style: italic;
+.rfcEditorRemove {
+  & p:first-of-type {
+    font-style: italic;
+  }
 }
 .cref {
   background-color: rgba(249, 232, 105, 0.3);
@@ -832,19 +826,21 @@ hr.addr {
 }
 
 @media screen {
-  #toc nav {
-    font-family: var(--font-title);
-    font-weight: 360;
-    & > ul { margin-bottom: 2em; }
-    & ul {
-      margin: 0 0 0 4px;
-      & :is(p, li) {
-        margin: 2px 0;
+  #toc {
+    & nav {
+      font-family: var(--font-title);
+      font-weight: 360;
+      & > ul { margin-bottom: 2em; }
+      & ul {
+        margin: 0 0 0 4px;
+        & :is(p, li) {
+          margin: 2px 0;
+        }
       }
     }
-  }
-  #toc a.toplink {
-    float: right;
+    & a.toplink {
+      float: right;
+    }
   }
 }
 @media not screen {
@@ -865,54 +861,54 @@ hr.addr {
     margin: 0;
     border-bottom: 1px solid #ccc;
     opacity: 0.6;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 2px 0 2px 6px;
-    padding-right: 1em;
-    font-size: 18px;
-    line-height: 24px;
-    min-width: 190px;
-    text-align: right;
-    background-color: #444;
-    color: white;
-    cursor: pointer;
-    &::before { /* css hamburger */
-      float: right;
-      position: relative;
-      width: 1em;
-      height: 1px;
-      left: -164px;
-      margin: 8px 0 0 0;
-      background: white none repeat scroll 0 0;
-      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
-      content: "";
+    & h2 {
+      margin: 0;
+      padding: 2px 0 2px 6px;
+      padding-right: 1em;
+      font-size: 18px;
+      line-height: 24px;
+      min-width: 190px;
+      text-align: right;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      &::before { /* css hamburger */
+        float: right;
+        position: relative;
+        width: 1em;
+        height: 1px;
+        left: -164px;
+        margin: 8px 0 0 0;
+        background: white none repeat scroll 0 0;
+        box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+        content: "";
+      }
     }
-  }
-  #toc nav {
-    display: none;
-    background-color: var(--background-color);
-    padding: 0.5em 1em 1em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    height: calc(100vh - 48px);
-    border-left: 1px solid #ddd;
-  }
-  #toc.active {
-    opacity: 1;
-    & nav { display: block; }
-  }
-  /* Make the collapsed ToC header render white on gray also when it's a link */
-  #toc h2 a,
-  #toc h2 a:is(:link, :focus, :hover),
-  #toc a.toplink,
-  #toc a.toplink:hover {
-    color: white;
-    background-color: #444;
-    text-decoration: none;
-  }
-  #toc a.toplink {
-    margin: 2px 0.5em 0;
+    & nav {
+      display: none;
+      background-color: var(--background-color);
+      padding: 0.5em 1em 1em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      height: calc(100vh - 48px);
+      border-left: 1px solid #ddd;
+    }
+    &.active {
+      opacity: 1;
+      & nav { display: block; }
+    }
+    /* Make the collapsed ToC header render white on gray also when it's a link */
+    & h2 a,
+    & h2 a:is(:link, :focus, :hover),
+    & a.toplink,
+    & a.toplink:hover {
+      color: white;
+      background-color: #444;
+      text-decoration: none;
+    }
+    & a.toplink {
+      margin: 2px 0.5em 0;
+    }
   }
 }
 
@@ -931,26 +927,26 @@ hr.addr {
     margin: 0;
     padding: 0;
     z-index: 1;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 0.25em 1em 1em 0;
-  }
-  #toc nav {
-    display: block;
-    height: calc(90vh - 84px);
-    bottom: 0;
-    padding: 0.5em 0 2em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
+    & h2 {
+      margin: 0;
+      padding: 0.25em 1em 1em 0;
+    }
+    & nav {
+      display: block;
+      height: calc(90vh - 84px);
+      bottom: 0;
+      padding: 0.5em 0 2em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+    & a.toplink {
+      margin: 8px 0.5em 0;
+    }
   }
   img { /* future proofing */
     max-width: 100%;
     height: auto;
-  }
-  #toc a.toplink {
-    margin: 8px 0.5em 0;
   }
 }
 
@@ -966,12 +962,13 @@ hr.addr {
   #n-copyright-notice {
     border-bottom: none;
   }
-  #toc, #n-introduction {
-    page-break-before: always;
-  }
   #toc {
+    page-break-before: always;
     border-top: none;
     padding-top: 0;
+  }
+  #n-introduction {
+    page-break-before: always;
   }
   figure, pre, .vcard {
     page-break-inside: avoid;
@@ -1033,17 +1030,19 @@ hr.addr {
 }
 
 /* SVG Trick: a prefix match works because only black and white are allowed */
-svg :is([stroke="black"], [stroke^="#000"]) {
-  stroke: var(--text-color);
-}
-svg :is([stroke="white"], [stroke^="#fff"]) {
-  stroke: var(--background-color);
-}
-svg :is([fill="black"], [fill^="#000"], :not([fill])) {
-  fill: var(--text-color);
-}
-svg :is([fill="white"], [fill^="#fff"]) {
-  fill: var(--background-color);
+svg {
+  & :is([stroke="black"], [stroke^="#000"]) {
+    stroke: var(--text-color);
+  }
+  & :is([stroke="white"], [stroke^="#fff"]) {
+    stroke: var(--background-color);
+  }
+  & :is([fill="black"], [fill^="#000"], :not([fill])) {
+    fill: var(--text-color);
+  }
+  & :is([fill="white"], [fill^="#fff"]) {
+    fill: var(--background-color);
+  }
 }
 </style>
 
@@ -1052,12 +1051,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="center">SMTPUTF8 address syntax</td>
-<td class="right">March 2026</td>
+<td class="center">SMTPUTF8 Email Addresses</td>
+<td class="right">July 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Gulbrandsen &amp; Yao</td>
-<td class="center">Expires 3 September 2026</td>
+<td class="center">Expires 7 January 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,14 +1067,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="workgroup">mailmaint</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
 <dd class="internet-draft">draft-ietf-mailmaint-smtputf8-syntax-latest</dd>
+<dt class="label-updates">Updates:</dt>
+<dd class="updates">
+<a href="https://www.rfc-editor.org/rfc/rfc6532" class="eref">6532</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-02" class="published">2 March 2026</time>
+<time datetime="2026-07-06" class="published">6 July 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-09-03">3 September 2026</time></dd>
+<dd class="expires"><time datetime="2027-01-07">7 January 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1089,17 +1091,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </dd>
 </dl>
 </div>
-<h1 id="title">SMTPUTF8 address syntax</h1>
+<h1 id="title">SMTPUTF8 Email Addresses</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document specifies rules for email addresses that are flexible
-enough to express the addresses typically used with SMTPUTF8, while
-avoiding confusing or risky elements.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">This is one of a pair of documents: This is simple to implement,
-contains only globally viable rules and is intended to be usable for
-software such an MTA. Its companion defines has more complex rules,
-takes regional usage into account and aims to allow only addresses
-that are readable and cut-and-pastable in some community.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">RFC 6532 extends the internet email format to allow UTF8 in many
+contexts. This document restricts the set of allowed addresses in
+header fields slightly, and thereby simplifies use of these addresses.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This is one of a pair of documents. This one is simple to implement
+and contains only globally viable rules. Its companion has more
+complex rules, takes regional usage into account, and describes
+addresses that can be read by some community and cut-and-pasted in
+some locale.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-discussion-venues">
@@ -1131,7 +1133,7 @@ that are readable and cut-and-pastable in some community.<a href="#section-abstr
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 7 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1224,29 +1226,10 @@ domain parts by using encoded domain parts in the SMTP transaction
 (dømi.fo in this case) in the user interface.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">The email address syntax extension is in <span>[<a href="#RFC6532" class="cite xref">RFC6532</a>]</span>, and allows
 almost all UTF8 strings as localparts. While this certainly allows
-everything users want to use, it is also flexible enought to allow
-many things that users and implementers find surprising and sometimes
-worrying.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">The flexibility has caused considerable reluctance to support the full
-syntax in contexts such as web form address validation.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">This document attempts to describe rules that:<a href="#section-1-4" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-1-5">
-<li id="section-1-5.1">
-          <p id="section-1-5.1.1">includes the addresses that users generally want to use for
-themselves and organizations want to provision for their employees.<a href="#section-1-5.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-1-5.2">
-          <p id="section-1-5.2.1">excludes things that have been described as security risks.<a href="#section-1-5.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-1-5.3">
-          <p id="section-1-5.3.1">Looks safe at first glance to implementers (including ones with
-little unicode expertise) and are fairly easy to use in unit tests.<a href="#section-1-5.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-1-5.4">
-          <p id="section-1-5.4.1">Contain no regional rules.<a href="#section-1-5.4.1" class="pilcrow">¶</a></p>
-</li>
-      </ol>
-<p id="section-1-6">These goals are somewhat aspirational.<a href="#section-1-6" class="pilcrow">¶</a></p>
+everything users want to use, it is also flexible enough to allow many
+things that users and implementers find surprising and sometimes
+worrying. For example, the domain extracted by code may not match that
+shown to users on-screen.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="requirements-language">
@@ -1270,7 +1253,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 except that some are assigned to "Common" or a few other special
 values. Fraktur and /etc/rc.local aren't scripts in this document, but
 Latin is.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">Latin refers those code points that have the script property "Latin"
+<p id="section-3-2">Latin refers to those code points that have the script property "Latin"
 in Unicode. Orléans in France and Münster in Germany both have Latin
 names in this document. It also refers to combinations of those code
 points and combining characters, and to strings that contain no code
@@ -1288,6 +1271,7 @@ its localpart is latin and ASCII, and its domain part is latin and
 non-ASCII. 中国 is a Han string in this document, but 阿Q正传 is
 neither a Latin string nor a Han string, because it contains a Latin Q
 and three Han code points.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">The term a-label is defined in <span>[<a href="#RFC5890" class="cite xref">RFC5890</a>]</span> section 2.3.2.1.<a href="#section-3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rules">
@@ -1295,21 +1279,25 @@ and three Han code points.<a href="#section-3-6" class="pilcrow">¶</a></p>
       <h2 id="name-rules">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-rules" class="section-name selfRef">Rules</a>
       </h2>
-<p id="section-4-1">Based on the above goals, the following rules are formulated:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">The following three rules apply to the
+<span>[<a href="#I-D.ietf-emailcore-rfc5322bis" class="cite xref">I-D.ietf-emailcore-rfc5322bis</a>]</span> mailbox production, as indirectly
+extended by <span>[<a href="#RFC6532" class="cite xref">RFC6532</a>]</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4-2">
 <li id="section-4-2.1">
           <p id="section-4-2.1.1">An atom in an address <span class="bcp14">MUST NOT</span> be an a-label (e.g. xn--dmi-0na).<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-4-2.2">
           <p id="section-4-2.2.1">An address <span class="bcp14">MUST</span> contain only code points in the "A", "H" and "K"
-classes defined by <span>[<a href="#RFC5892" class="cite xref">RFC5892</a>]</span> and <span>[<a href="#RFC8264" class="cite xref">RFC8264</a>]</span>, as well as the code points
-allowed by the "F" class, also defined by <span>[<a href="#RFC5892" class="cite xref">RFC5892</a>]</span>, "." and "@". (A
-contains letters and digits, H contains join controls, K contains
-ASCII and F contains a few exceptions.)<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+classes, the code points allowed by the "F" class, and "." and "@".
+These classes are defined in <span>[<a href="#RFC8264" class="cite xref">RFC8264</a>]</span> section 9: A (LetterDigits)
+in 9.1, H (JoinControl) in 9.8, K (ASCII7) in 9.11 and F (Exceptions)
+in 9.6. All but K are also defined in <span>[<a href="#RFC5892" class="cite xref">RFC5892</a>]</span> section 2 (2.1, 2.8
+and 2.6 respectively). (A contains letters and digits, H contains join
+controls, K contains ASCII and F contains a few exceptions.)<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-4-2.3">
           <p id="section-4-2.3.1">An address <span class="bcp14">MUST NOT</span> contain more than one script, when ASCII is
-disregarded. (For example: In the word word Orléans, Orl and ans are
+disregarded. (For example: In the word Orléans, Orl and ans are
 ASCII and é is non-ASCII. Since é is a single letter, the word
 contains only one script.)<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
 </li>
@@ -1328,11 +1316,12 @@ contains no non-ASCII code points at all.<a href="#section-5-1" class="pilcrow">
 any a-label, 2) it consists entirely of code points in the "A" and "K"
 classes and 3) it consists entirely of 'Latin' and 'Common' code
 points (and ./@).<a href="#section-5-2" class="pilcrow">¶</a></p>
-<p id="section-5-3">The address U+200E '@' U+200F '.' U+200E is not permitted, because 3)
-U+200E and U+200F are in the "C" class as defined by <span>[<a href="#RFC5892" class="cite xref">RFC5892</a>]</span>, not A/H/K/F.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-3">The address U+200E '@' U+200F '.' U+200E is not permitted, because 2)
+U+200E and U+200F are in the "C" class (IgnorableProperties, <span>[<a href="#RFC5892" class="cite xref">RFC5892</a>]</span>
+section 2.3), not A/H/K/F.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <p id="section-5-4">阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
 dømi@dømi.fo is legal because it contains ASCII and Latin, but
-阿Q正传@dømi.fo is illegal because it contains both Han (阿) and Latin
+阿Q正传@dømi.fo is not, because it contains both Han (阿) and Latin
 non-ASCII (ø).<a href="#section-5-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1349,21 +1338,13 @@ non-ASCII (ø).<a href="#section-5-4" class="pilcrow">¶</a></p>
       <h2 id="name-security-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-7-1">When a program renders a unicode string on-screen or audibly and
-includes a substring supplied by a potentially malevolent source, the
-included substring can affect the rendering of a surprisingly large
-part of the overall string.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">This document describes rules that make it difficult for an attacker
-to use email addresses for such an attack. Implementers should be
-aware of other possible vectors for the same kind of attack, such as
-subject fields and email address display-names.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">If an address is signed using DKIM and (against the rules of this
-document) mixes left-to-right and right-to-left writing, parts of both
-the localpart and the domain part can be rendered on the same side of
-the '@'. This can create the appearance that a different domain signed
-the message.<a href="#section-7-3" class="pilcrow">¶</a></p>
-<p id="section-7-4">The rules in this document permit a number of code points that can
-make it difficult to cut and paste.<a href="#section-7-4" class="pilcrow">¶</a></p>
+<p id="section-7-1">When a program renders a non-ASCII email address string on-screen or
+stores it as a string (e.g. in a system log file), the address shown
+to the eventual human may not be as intended. One possible way to
+diminish the risk is to replace impermissible code points with U+FFFD,
+REPLACEMENT CHARACTER. There are also other options.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">The rules in this document permit a number of code points that can
+make an address difficult to cut and paste.<a href="#section-7-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -1377,9 +1358,13 @@ make it difficult to cut and paste.<a href="#section-7-4" class="pilcrow">¶</a>
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="RFC5322">[RFC5322]</dt>
+<dt id="I-D.ietf-emailcore-rfc5322bis">[I-D.ietf-emailcore-rfc5322bis]</dt>
         <dd>
-<span class="refAuthor">Resnick, P., Ed.</span>, <span class="refTitle">"Internet Message Format"</span>, <span class="seriesInfo">RFC 5322</span>, <span class="seriesInfo">DOI 10.17487/RFC5322</span>, <time datetime="2008-10" class="refDate">October 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5322">https://www.rfc-editor.org/rfc/rfc5322</a>&gt;</span>. </dd>
+<span class="refAuthor">Resnick, P.</span>, <span class="refTitle">"Internet Message Format"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-emailcore-rfc5322bis-12</span>, <time datetime="2024-06-13" class="refDate">13 June 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-emailcore-rfc5322bis-12">https://datatracker.ietf.org/doc/html/draft-ietf-emailcore-rfc5322bis-12</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5890">[RFC5890]</dt>
+        <dd>
+<span class="refAuthor">Klensin, J.</span>, <span class="refTitle">"Internationalized Domain Names for Applications (IDNA): Definitions and Document Framework"</span>, <span class="seriesInfo">RFC 5890</span>, <span class="seriesInfo">DOI 10.17487/RFC5890</span>, <time datetime="2010-08" class="refDate">August 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5890">https://www.rfc-editor.org/rfc/rfc5890</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5892">[RFC5892]</dt>
         <dd>
@@ -1482,7 +1467,7 @@ publication (and after IETF Last Call).<a href="#appendix-A-3" class="pilcrow">�
 <p id="appendix-B-2">(Wow, the ack section is already outdated)<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <p id="appendix-B-3">Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
 examples and documentation.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
-<p id="appendix-B-4">阿Q正传@ is a famous Chinese novella, 阿Q is the main character.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
+<p id="appendix-B-4">阿Q正传 is a famous Chinese novella, 阿Q is the main character.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="instructions-to-the-rfc-editor">
@@ -1514,6 +1499,9 @@ a section of its own.<a href="#appendix-D-1.2.1" class="pilcrow">¶</a></p>
         <li id="appendix-D-1.3">
           <p id="appendix-D-1.3.1">Should this even mention the requirements placed on domains by
 IDNA, ICANN, web browsers and others?<a href="#appendix-D-1.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-D-1.4">
+          <p id="appendix-D-1.4.1"><span class="bcp14">SHOULD</span> or <span class="bcp14">MUST</span> not contain a-labels?<a href="#appendix-D-1.4.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 </section>

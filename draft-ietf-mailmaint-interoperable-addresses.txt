@@ -5,8 +5,8 @@
 mailmaint                                                 A. Gulbrandsen
 Internet-Draft                                                     ICANN
 Intended status: Standards Track                                  J. Yao
-Expires: 3 September 2026                                          CNNIC
-                                                            2 March 2026
+Expires: 7 January 2027                                            CNNIC
+                                                             6 July 2026
 
 
                Interoperable Email Addresses for SMTPUTF8
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 September 2026.
+   This Internet-Draft will expire on 7 January 2027.
 
 Copyright Notice
 
