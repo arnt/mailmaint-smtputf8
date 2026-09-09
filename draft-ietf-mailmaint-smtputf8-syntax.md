@@ -134,7 +134,7 @@ extended by {{RFC6532}}.
 1. An atom in an address MUST NOT be an a-label (e.g. xn--dmi-0na).
 
 2. An address MUST contain only code points in the "A", "H" and "K"
-classes, the code points allowed by the "F" class, and "." and "@".
+classes, the code points allowed by the "F" class, and " ", "." and "@".
 These classes are defined in {{RFC8264}} section 9: A (LetterDigits)
 in 9.1, H (JoinControl) in 9.8, K (ASCII7) in 9.11 and F (Exceptions)
 in 9.6. All but K are also defined in {{RFC5892}} section 2 (2.1, 2.8

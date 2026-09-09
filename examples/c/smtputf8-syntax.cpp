@@ -60,14 +60,33 @@ static bool single_char_helper(unsigned int cp,
 			       bool (& used)[256]) {
     if(s == None) {
         return false;
-    } else if(s == Common) {
-        // Common can be combined with others
+    } else if(s == Common || s == Inherited) {
+        // Common and Inherited (combining marks) go with any script
     } else if(!used[s]) {
         if(++c > 1)
             return false;
         used[s] = true;
     }
     return true;
+}
+
+// Rule 1. The ACE prefix is case-insensitive, so XN-- is an a-label
+// too. Atoms are delimited by '.' and '@' here; a quoted string isn't
+// an atom, but no a-label hides in one either.
+static bool contains_a_label(const std::wstring & s) {
+    std::wstring::size_type atom = 0;
+    while(atom < s.length()) {
+	if(atom + 4 <= s.length() &&
+	   (s[atom] == 'x' || s[atom] == 'X') &&
+	   (s[atom+1] == 'n' || s[atom+1] == 'N') &&
+	   s[atom+2] == '-' && s[atom+3] == '-')
+	    return true;
+	std::wstring::size_type next = s.find_first_of(L".@", atom);
+	if(next == std::wstring::npos)
+	    return false;
+	atom = next + 1;
+    }
+    return false;
 }
 
 static Script script_of(unsigned int cp) {
@@ -85,8 +104,10 @@ static Script script_of(unsigned int cp) {
 }
 
 bool smtputf8_syntax_valid(const std::wstring s) {
-    int pos = 0;
-    bool used[256];
+    if(contains_a_label(s))
+	return false;
+    std::wstring::size_type pos = 0;
+    bool used[256] = {};
     unsigned int scripts = 0;
     bool hiraganaKatakanaHanNeeded = false;
     bool arabicIndicDigitsUsed = false;
@@ -96,7 +117,10 @@ bool smtputf8_syntax_valid(const std::wstring s) {
         if(cp >= 0x110000)
             return false; // beyond unicode, cannot be valid
         if(cp < 128) {
-            // it's ASCII
+	    // ASCII, and rule 3 disregards it. Class K is %x21-7E and
+	    // rule 2 adds SPACE, so DEL and the C0 controls are out.
+	    if(cp < 0x20 || cp == 0x7f)
+		return false;
 	} else if(cp == 0xB7) {
 	    // RFC 5892 Appendix A.3
 	    if(pos == 0 || pos+1 >= s.length())
@@ -143,19 +167,48 @@ bool smtputf8_syntax_valid(const std::wstring s) {
     return true;
 }
 
-static const char * should_pass[] = {
-    "test",
-    "naïve",
-    "dømi",
-    "阿Q正传@阿Q正传.example",
-    "",
-    "राजीव",
-    "cel·la"
-};
-
-static const char * should_fail[] = {
-    "cex·xa",
-    "cel·"
+// The tests from tests.json in this draft's repository, which the
+// draft reproduces in its Testing appendix. The invisible code
+// points are written as escapes, as they are there.
+static const struct {
+    const char * address;
+    bool valid;
+} tests[] = {
+    { "example@example.com", true },
+    { "Example@example.com", true },
+    { "dømi@dømi.fo", true },
+    { "example@xn--gr-zia.example.com", false },
+    { "xn--gr-zia@example.com", false },
+    { "com.xn--gr-zia@example.com", false },
+    { "XN--GR-ZIA@example.com", false },
+    { "xn-gr@example.com", true },
+    { "\u200E4@example.com", false },
+    { "\u061C@example.com", false },
+    { "\u200E@\u200F.\u200E", false },
+    { "ali\u202Emoc.elpmaxe@kravdraa.ec", false },
+    { "🐪@example.com", false },
+    { "IВM@dømi.fo", false },
+    { "阿Q正传@dømi.fo", false },
+    { "Толстой@example.com", true },
+    { "名字@example.com", true },
+    { "阿Q正传@阿Q正传.example", true },
+    { "名字@例子.中国", true },
+    { "info@例子.中国", true },
+    { "उदाहरण@उदाहरण.भारत", true },
+    { "gøril@example.com", true },
+    { "ا@2ا.ا", true },
+    { "ا@example.com", true },
+    { "café@example.com", true },
+    { "cafe\u0301@example.com", true },
+    { "..@example.com", true },
+    { "\"john.doe\"@example.com", true },
+    { "\"john doe\"@example.com", true },
+    { "john\u0009doe@example.com", false },
+    { "john\u00A0doe@example.com", false },
+    { "grå\u200B\uFEFF\u00AD\u00A0\u2003\u3000@grå.org", false },
+    { "cel·la@example.com", true },
+    { "cex·xa@example.com", false },
+    { "\u0660\u06F0@example.com", false },
 };
 
 int main(int argc, char ** argv) {
@@ -171,10 +224,19 @@ int main(int argc, char ** argv) {
     }
 
     // tests:
-    for(const char * t : should_pass)
-	if(!smtputf8_syntax_valid(converter.from_bytes(t)))
-	    std::cout << "Test failed: " << t << std::endl;
-    for(const char * t : should_fail)
-	if(smtputf8_syntax_valid(converter.from_bytes(t)))
-	    std::cout << "Test failed: " << t << std::endl;
+    for(auto t : tests) {
+	std::wstring a = converter.from_bytes(t.address);
+	if(smtputf8_syntax_valid(a) != t.valid)
+	    std::cout << "Test failed: " << t.address
+		      << " (expected " << (t.valid ? "ok" : "nah")
+		      << ")" << std::endl;
+    }
+
+    // The table holds café twice, in NFC and in NFD. If some tool ever
+    // normalizes this source, the two become the same string and the
+    // NFD test stops testing anything.
+    if(converter.from_bytes("cafe\u0301").length() !=
+       converter.from_bytes("café").length() + 1)
+	std::cout << "Test failed: café is no longer both NFC and NFD"
+		  << std::endl;
 }

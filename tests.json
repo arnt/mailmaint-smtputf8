@@ -157,6 +157,17 @@
 	"comment": "a quoted-string localpart is valid RFC5322 and uses only ASCII, but WHATWG type=email has no quoting, so it is not interoperable"
     },
     {
+	"address": "\"john doe\"@example.com",
+	"valid": true,
+	"interoperable": false,
+	"comment": "SPACE (U+0020) is permitted, so a quoted-string may contain one; WHATWG type=email has no quoting, so this is not interoperable either"
+    },
+    {
+	"address": "grå\u200B\uFEFF\u00AD\u00A0\u2003\u3000@grå.org",
+	"valid": false,
+	"comment": "six different banned code points follow the å: U+200B ZERO WIDTH SPACE, U+FEFF ZERO WIDTH NO-BREAK SPACE, U+00AD SOFT HYPHEN, U+00A0 NO-BREAK SPACE, U+2003 EM SPACE and U+3000 IDEOGRAPHIC SPACE"
+    },
+    {
 	"address": "cel·la@example.com",
 	"valid": true,
 	"interoperable": true,
