@@ -69,6 +69,37 @@
 	"comment": "U+1F42A CAMEL is a symbol, not a letter or digit, so it is outside the permitted repertoire"
     },
     {
+	"address": "admin\u3164@example.com",
+	"valid": false,
+	"comment": "U+3164 HANGUL FILLER renders as nothing, so this looks exactly like admin@example.com; the IdentifierClass disallows U+3164"
+    },
+    {
+	"address": "\uFF21\uFF24\uFF2D\uFF29\uFF2E@example.com",
+	"valid": false,
+	"comment": "the fullwidth letters ADMIN are compatibility forms, which the IdentifierClass disallows (to avoid ambiguity caused by nornalisation)"
+    },
+    {
+	"address": "名字\uFE0F@example.com",
+	"valid": false,
+	"comment": "U+FE0F VARIATION SELECTOR-16 is invisible and changes nothing but the glyph chosen for 字"
+    },
+    {
+	"address": "م\u0640حمد@example.com",
+	"valid": false,
+	"comment": "U+0640 ARABIC TATWEEL only elongates the preceding letter, so it gives one address an unbounded number of spellings; RFC5892 2.6 lists it as DISALLOWED although the category rules would have made it PVALID"
+    },
+    {
+	"address": "\u1100\u1161\u11A8@example.com",
+	"valid": false,
+	"comment": "the conjoining jamo render as 각, indistinguishable from the precomposed syllable below; the IdentifierClass disallows old Hangul jamo"
+    },
+    {
+	"address": "각@example.com",
+	"valid": true,
+	"interoperable": false,
+	"comment": "the same syllable precomposed (U+AC01) is fine; Hangul with an ASCII domain is valid but, like Cyrillic, not interoperable"
+    },
+    {
 	"address": "IВM@dømi.fo",
 	"valid": false,
 	"comment": "two non-ASCII scripts: U+0412 (В) is Cyrillic and ø is Latin"
@@ -163,9 +194,9 @@
 	"comment": "SPACE (U+0020) is permitted, so a quoted-string may contain one; WHATWG type=email has no quoting, so this is not interoperable either"
     },
     {
-	"address": "grå\u200B\uFEFF\u00AD\u00A0\u2003\u3000@grå.org",
+	"address": "grå\u0009\u200B\uFEFF\u00AD\u00A0\u2003\u3000@grå.org",
 	"valid": false,
-	"comment": "six different banned code points follow the å: U+200B ZERO WIDTH SPACE, U+FEFF ZERO WIDTH NO-BREAK SPACE, U+00AD SOFT HYPHEN, U+00A0 NO-BREAK SPACE, U+2003 EM SPACE and U+3000 IDEOGRAPHIC SPACE"
+	"comment": "seven different banned code points follow the å: U+0009 TAB, U+200B ZERO WIDTH SPACE, U+FEFF ZERO WIDTH NO-BREAK SPACE, U+00AD SOFT HYPHEN, U+00A0 NO-BREAK SPACE, U+2003 EM SPACE and U+3000 IDEOGRAPHIC SPACE; U+0020 is the only one of these rule 2 admits"
     },
     {
 	"address": "cel·la@example.com",

@@ -125,6 +125,9 @@ and three Han code points.
 
 The term a-label is defined in {{RFC5890}} section 2.3.2.1.
 
+PRECIS is described in {{RFC8264}}, and the IdentifierClass in section
+4.2 of that document.
+
 # Rules
 
 The following three rules apply to the
@@ -133,17 +136,14 @@ extended by {{RFC6532}}.
 
 1. An atom in an address MUST NOT be an a-label (e.g. xn--dmi-0na).
 
-2. An address MUST contain only code points in the "A", "H" and "K"
-classes, the code points allowed by the "F" class, and " ", "." and "@".
-These classes are defined in {{RFC8264}} section 9: A (LetterDigits)
-in 9.1, H (JoinControl) in 9.8, K (ASCII7) in 9.11 and F (Exceptions)
-in 9.6. All but K are also defined in {{RFC5892}} section 2 (2.1, 2.8
-and 2.6 respectively). (A contains letters and digits, H contains join
-controls, K contains ASCII and F contains a few exceptions.)
+2. An address MUST contain only code points that the PRECIS
+IdentifierClass treats as valid, and " ". Where the IdentifierClass
+requires a contextual rule, the address MUST satisfy that rule
+({{RFC5892}} Appendix A).
 
 3. An address MUST NOT contain more than one script, when ASCII is
-disregarded. (For example: In the word Orléans, Orl and ans are
-ASCII and é is non-ASCII. Since é is a single letter, the word
+disregarded. (For example: In the word Orléans, Orl and ans are ASCII
+and é is non-ASCII. The single é is in a single script, so the word
 contains only one script.)
 
 # Examples
@@ -153,13 +153,19 @@ a-label, 2) it consists entirely of permissible code points and 3) it
 contains no non-ASCII code points at all.
 
 The address dømi@dømi.fo is permitted, because 1) it does not contain
-any a-label, 2) it consists entirely of code points in the "A" and "K"
-classes and 3) it consists entirely of 'Latin' and 'Common' code
-points (and ./@).
+any a-label, 2) the IdentifierClass permits every code point in it and
+3) it consists entirely of 'Latin' and 'Common' code points (and ./@).
 
 The address U+200E '@' U+200F '.' U+200E is not permitted, because 2)
-U+200E and U+200F are in the "C" class (IgnorableProperties, {{RFC5892}}
-section 2.3), not A/H/K/F.
+the IdentifierClass disallows U+200E and U+200F as ignorable code
+points.
+
+The address 'admin' U+3164 '@example.com' is not permitted for the
+same reason. U+3164 HANGUL FILLER renders as nothing at all, so the
+address looks exactly like admin@example.com. U+0640 ARABIC TATWEEL is
+disallowed too, although it is a letter by category: it only elongates
+the preceding letter, and would let one address be spelled in any
+number of ways.
 
 阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
 dømi@dømi.fo is legal because it contains ASCII and Latin, but

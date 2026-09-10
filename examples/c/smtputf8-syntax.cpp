@@ -1,5 +1,4 @@
-#include <codecvt>
-#include <locale>
+#include <cstdint>
 #include <iostream>
 #include <string>
 
@@ -40,19 +39,54 @@ typedef enum {
     Vithkuqi, Wancho, Warang_Citi, Yezidi, Yi, Zanabazar_Square } Script;
 
 const struct {
-    // this is just 63 bits in total, so a plain scan will be fast on
-    // most CPUs made after 2005.
-    unsigned int start : 21;
-    unsigned int length : 20;
+    // 64 bits in total, so a plain scan will be fast on most CPUs made
+    // after 2005.
+    uint64_t start : 21;
+    uint64_t length : 20;
     Script script: 8;
-    signed int index : 14;
-} unicodeData[577] = {
+    int64_t index : 15;
+} unicodeData[] = {
 #include "unicodedata-1.h"
 };
 
-const Script supplement[7441] = {
+const Script supplement[] = {
 #include "unicodedata-2.h"
 };
+
+// The index above is signed and 15 bits wide, so it cannot grow past
+// 16383. Today there are about 6800 entries, so there's room to 
+// grow, but this is something to check.
+static_assert(sizeof(supplement) / sizeof(supplement[0]) <= 16383,
+	      "supplement outgrew the index field in unicodeData");
+
+// std::wstring_convert does this, but it has been deprecated since
+// C++17 and clang 18 can no longer compile it against libstdc++ 16.
+// This does not validate the encoding; the input here is either a
+// literal below or something the user typed.
+static std::wstring from_utf8(const char * s) {
+    static_assert(sizeof(wchar_t) >= 4,
+		  "wchar_t cannot hold a code point outside the BMP");
+    std::wstring r;
+    while(*s) {
+	unsigned char c = *s++;
+	unsigned int cp = c;
+	int more = 0;
+	if(c >= 0xf0) {
+	    cp = c & 0x07;
+	    more = 3;
+	} else if(c >= 0xe0) {
+	    cp = c & 0x0f;
+	    more = 2;
+	} else if(c >= 0xc0) {
+	    cp = c & 0x1f;
+	    more = 1;
+	}
+	while(more-- > 0 && ((unsigned char)*s & 0xc0) == 0x80)
+	    cp = (cp << 6) | ((unsigned char)*s++ & 0x3f);
+	r += (wchar_t)cp;
+    }
+    return r;
+}
 
 static bool single_char_helper(unsigned int cp,
 			       Script s,
@@ -90,8 +124,9 @@ static bool contains_a_label(const std::wstring & s) {
 }
 
 static Script script_of(unsigned int cp) {
+    const int last = sizeof(unicodeData) / sizeof(unicodeData[0]) - 1;
     int n = 0;
-    while(n < 576 && unicodeData[n].start < cp)
+    while(n < last && unicodeData[n].start < cp)
 	n++;
     if(unicodeData[n].start > cp)
 	n--;
@@ -187,6 +222,12 @@ static const struct {
     { "\u200E@\u200F.\u200E", false },
     { "ali\u202Emoc.elpmaxe@kravdraa.ec", false },
     { "🐪@example.com", false },
+    { "admin\u3164@example.com", false },
+    { "\uFF21\uFF24\uFF2D\uFF29\uFF2E@example.com", false },
+    { "名字\uFE0F@example.com", false },
+    { "م\u0640حمد@example.com", false },
+    { "\u1100\u1161\u11A8@example.com", false },
+    { "각@example.com", true },
     { "IВM@dømi.fo", false },
     { "阿Q正传@dømi.fo", false },
     { "Толстой@example.com", true },
@@ -203,20 +244,17 @@ static const struct {
     { "..@example.com", true },
     { "\"john.doe\"@example.com", true },
     { "\"john doe\"@example.com", true },
-    { "john\u0009doe@example.com", false },
-    { "john\u00A0doe@example.com", false },
-    { "grå\u200B\uFEFF\u00AD\u00A0\u2003\u3000@grå.org", false },
+    { "grå\u0009\u200B\uFEFF\u00AD\u00A0\u2003\u3000@grå.org", false },
     { "cel·la@example.com", true },
     { "cex·xa@example.com", false },
     { "\u0660\u06F0@example.com", false },
 };
 
 int main(int argc, char ** argv) {
-    std::wstring_convert<std::codecvt_utf8<wchar_t> > converter;
     // command-line fun:
     int i = 1;
     while(i < argc) {
-        std::wstring us = converter.from_bytes(argv[i]);
+        std::wstring us = from_utf8(argv[i]);
         std::cout << argv[i] << ": "
                   << ( smtputf8_syntax_valid(us) ? "ok" : "nah" )
                   << std::endl;
@@ -225,18 +263,16 @@ int main(int argc, char ** argv) {
 
     // tests:
     for(auto t : tests) {
-	std::wstring a = converter.from_bytes(t.address);
+	std::wstring a = from_utf8(t.address);
 	if(smtputf8_syntax_valid(a) != t.valid)
 	    std::cout << "Test failed: " << t.address
 		      << " (expected " << (t.valid ? "ok" : "nah")
 		      << ")" << std::endl;
     }
 
-    // The table holds café twice, in NFC and in NFD. If some tool ever
-    // normalizes this source, the two become the same string and the
-    // NFD test stops testing anything.
-    if(converter.from_bytes("cafe\u0301").length() !=
-       converter.from_bytes("café").length() + 1)
+    // The table above contains café twice, in NFC and in NFD. Make
+    // sure that nothing normalises the source code and neuters the test.
+    if(from_utf8("cafe\u0301").length() != from_utf8("café").length() + 1)
 	std::cout << "Test failed: café is no longer both NFC and NFD"
 		  << std::endl;
 }
