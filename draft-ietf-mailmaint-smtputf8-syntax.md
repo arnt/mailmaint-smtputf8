@@ -208,22 +208,6 @@ make an address difficult to cut and paste.
 
 --- back
 
-# Testing
-
-This is a set of test addresses in JSON format.
-
-Below is a verbatim copy of
-https://github.com/arnt/mailmaint-smtputf8/tests.json as it was
-on (date here). It contains a number of strange and unusual code points, so
-cutting and pasting this may not work. Rather, it is recommended to
-either use the rfcstrip tool or download the tests using a command
-such as curl
-https://github.com/arnt/mailmaint-smtputf8/tests.json >
-tests.json.
-
-Note to IETF reviewers: The tests will be included here shortly before
-publication (and after IETF Last Call).
-
 # Acknowledgments
 
 The authors wish to thank John C. Klensin, (your name here, please)
@@ -242,17 +226,26 @@ Please remove all mentions of the Protocol Police before publication
 
 Please remove the Open Issues section.
 
+# Testing
+
+This is a set of test addresses in JSON format.
+
+Below is a verbatim copy of
+https://github.com/arnt/mailmaint-smtputf8/tests.json as it was
+on (date here). It contains a number of strange and unusual code points, so
+cutting and pasting this may not work. Rather, it is recommended to
+either use the rfcstrip tool or download the tests using a command
+such as curl
+https://github.com/arnt/mailmaint-smtputf8/tests.json >
+tests.json.
+
+Note to IETF reviewers: The tests will be included here shortly before
+publication (and after IETF Last Call).
+
 # Open issues
 
-1. Wording to identify destiny; I think this should probably become a
-proposed standard and modify a couple of RFCs, but I'm uncertain about
-some details and left that open now.
-
-4. More words on the relationship between this and the
+1. More words on the relationship between this and the
 companion. There are several parallel differences, maybe this warrants
 a section of its own.
 
-5. Should this even mention the requirements placed on domains by
-IDNA, ICANN, web browsers and others?
-
-6. SHOULD or MUST not contain a-labels?
+2. SHOULD or MUST not contain a-labels?
