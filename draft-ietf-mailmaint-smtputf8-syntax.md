@@ -39,6 +39,7 @@ normative:
   RFC8264:
 
 informative:
+  RFC952:
   RFC3490:
   RFC5891:
   RFC6533:
@@ -142,9 +143,18 @@ requires a contextual rule, the address MUST satisfy that rule
 ({{RFC5892}} Appendix A).
 
 3. An address MUST NOT contain more than one script, when ASCII is
-disregarded. (For example: In the word Orléans, Orl and ans are ASCII
+disregarded. Han, Hiragana and Katakana count as one script here,
+since Japanese uses all three together; so do Han and Hangul, and Han
+and Bopomofo. (For example: In the word Orléans, Orl and ans are ASCII
 and é is non-ASCII. The single é is in a single script, so the word
-contains only one script.)
+contains only one script. まり子 is Hiragana and Han, which count as
+one.)
+
+This does not affect rules in other documents. For example,
+{{RFC952}}], {{RFC5891}} and others specify rules on domain names,
+which implicitly affect which email addresses are permitted on the
+public internet. Domain registries often have policies regarding which
+names may be registered.
 
 # Examples
 
@@ -167,10 +177,19 @@ disallowed too, although it is a letter by category: it only elongates
 the preceding letter, and would let one address be spelled in any
 number of ways.
 
+The address まり子@まり子.日本 is permitted, because 1) it contains no
+a-label, 2) the IdentifierClass permits every code point in it and 3)
+Hiragana and Han count as one script.
+
 阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
 dømi@dømi.fo is legal because it contains ASCII and Latin, but
 阿Q正传@dømi.fo is not, because it contains both Han (阿) and Latin
 non-ASCII (ø).
+
+example@-example-.example.com is permitted by the rules above.
+However, since {{RFC952}} and its successors prohibit both of the
+hyphens, that email address is effectively not permitted on the
+internet.
 
 # IANA Considerations {#IANA}
 

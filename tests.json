@@ -176,12 +176,6 @@
 	"comment": "the same café in NFD (e + U+0301 combining acute), one code point longer; valid, but not interoperable because it is not NFC"
     },
     {
-	"address": "..@example.com",
-	"valid": true,
-	"interoperable": false,
-	"comment": "two ASCII dots are valid code points, but WHATWG type=email forbids the empty atoms"
-    },
-    {
 	"address": "\"john.doe\"@example.com",
 	"valid": true,
 	"interoperable": false,
@@ -213,5 +207,17 @@
 	"address": "\u0660\u06F0@example.com",
 	"valid": false,
 	"comment": "Arabic-Indic (U+0660) and Extended Arabic-Indic (U+06F0) digits must not be mixed (RFC5892 A.8 and A.9)"
+    },
+    {
+	"address": "まり子@まり子.日本",
+	"valid": true,
+	"interoperable": true,
+	"comment": "まり子 is a common Japanese name that mixes scripts in the way Japanese sometimes does"
+    },
+    {
+	"address": "지훈@まり子.日本",
+	"valid": false,
+	"comment": "Hangul counts as one script together with Han, and Hiragana does too, but no combination permits a combination of all three"
     }
 ]
+

@@ -4,7 +4,7 @@
 
 /* This large enum was created by the following command:
 
-   (awk '/^\[/{print $4}' < unicodedata-1.h ; \
+   (awk '/^\{/{print $4}' < unicodedata-1.h ; \
     awk '/^[^\/]/{print $1}' < unicodedata-2.h ) | \
     sort -u | fmt -70 | sed 's/^/    /'
 */
@@ -15,28 +15,28 @@ typedef enum {
     Caucasian_Albanian, Chakma, Cham, Cherokee, Chorasmian, Common,
     Coptic, Cuneiform, Cypriot, Cypro_Minoan, Cyrillic, Deseret,
     Devanagari, Dives_Akuru, Dogra, Duployan, Egyptian_Hieroglyphs,
-    Elbasan, Elymaic, Ethiopic, Garay, Georgian, Glagolitic, Gothic,
-    Grantha, Greek, Gujarati, Gunjala_Gondi, Gurmukhi, Gurung_Khema,
-    Han, Hangul, Hanifi_Rohingya, Hanunoo, Hatran, Hebrew,
-    Hiragana, Imperial_Aramaic, Inherited, Inscriptional_Pahlavi,
-    Inscriptional_Parthian, Javanese, Kaithi, Kannada, Katakana, Kawi,
-    Kayah_Li, Kharoshthi, Khitan_Small_Script, Khmer, Khojki, Khudawadi,
-    Kirat_Rai, Lao, Latin, Lepcha, Limbu, Linear_A, Linear_B, Lisu,
-    Lycian, Lydian, Mahajani, Makasar, Malayalam, Mandaic, Manichaean,
-    Marchen, Masaram_Gondi, Medefaidrin, Meetei_Mayek, Mende_Kikakui,
-    Meroitic_Cursive, Meroitic_Hieroglyphs, Miao, Modi, Mongolian,
-    Mro, Multani, Myanmar, Nabataean, Nag_Mundari, Nandinagari, Newa,
-    New_Tai_Lue, Nko, None, Nushu, Nyiakeng_Puachue_Hmong, Ogham,
+    Elbasan, Elymaic, Ethiopic, Garay, Georgian, Glagolitic,
+    Gothic, Grantha, Greek, Gujarati, Gunjala_Gondi, Gurmukhi,
+    Gurung_Khema, Han, Hangul, Hanifi_Rohingya, Hanunoo, Hatran,
+    Hebrew, Hiragana, Imperial_Aramaic, Inherited, Inscriptional_Pahlavi,
+    Inscriptional_Parthian, Javanese, Jurchen, Kaithi, Kannada, Katakana,
+    Kawi, Kayah_Li, Kharoshthi, Khitan_Small_Script, Khmer, Khojki,
+    Khudawadi, Kirat_Rai, Lao, Latin, Lepcha, Limbu, Linear_A, Linear_B,
+    Lisu, Lycian, Lydian, Mahajani, Makasar, Malayalam, Mandaic,
+    Manichaean, Marchen, Masaram_Gondi, Medefaidrin, Meetei_Mayek,
+    Mende_Kikakui, Meroitic_Cursive, Meroitic_Hieroglyphs, Miao, Modi,
+    Mongolian, Mro, Multani, Myanmar, Nabataean, Nag_Mundari, Nandinagari,
+    Newa, New_Tai_Lue, Nko, None, Nushu, Nyiakeng_Puachue_Hmong, Ogham,
     Ol_Chiki, Old_Hungarian, Old_Italic, Old_North_Arabian, Old_Permic,
     Old_Persian, Old_Sogdian, Old_South_Arabian, Old_Turkic, Old_Uyghur,
     Ol_Onal, Oriya, Osage, Osmanya, Pahawh_Hmong, Palmyrene, Pau_Cin_Hau,
     Phags_Pa, Phoenician, Psalter_Pahlavi, Rejang, Runic, Samaritan,
-    Saurashtra, Sharada, Shavian, Siddham, Sidetic, SignWriting, Sinhala,
-    Sogdian, Sora_Sompeng, Soyombo, Sundanese, Sunuwar, Syloti_Nagri,
-    Syriac, Tagalog, Tagbanwa, Tai_Le, Tai_Tham, Tai_Viet, Tai_Yo, Takri,
-    Tamil, Tangsa, Tangut, Telugu, Thaana, Thai, Tibetan, Tifinagh,
-    Tirhuta, Todhri, Tolong_Siki, Toto, Tulu_Tigalari, Ugaritic, Vai,
-    Vithkuqi, Wancho, Warang_Citi, Yezidi, Yi, Zanabazar_Square } Script;
+    Saurashtra, Seal, Sharada, Shavian, Siddham, Sidetic, SignWriting,
+    Sinhala, Sogdian, Sora_Sompeng, Soyombo, Sundanese, Sunuwar,
+    Syloti_Nagri, Syriac, Tagalog, Tagbanwa, Tai_Le, Tai_Tham, Tai_Viet,
+    Tai_Yo, Takri, Tamil, Tangsa, Tangut, Telugu, Thaana, Thai, Tibetan,
+    Tifinagh, Tirhuta, Todhri, Tolong_Siki, Toto, Tulu_Tigalari, Ugaritic,
+    Vai, Vithkuqi, Wancho, Warang_Citi, Yezidi, Yi, Zanabazar_Square } Script;
 
 const struct {
     // 64 bits in total, so a plain scan will be fast on most CPUs made
@@ -54,7 +54,7 @@ const Script supplement[] = {
 };
 
 // The index above is signed and 15 bits wide, so it cannot grow past
-// 16383. Today there are about 6800 entries, so there's room to 
+// 16383. Today there are about 6800 entries, so there's room to
 // grow, but this is something to check.
 static_assert(sizeof(supplement) / sizeof(supplement[0]) <= 16383,
 	      "supplement outgrew the index field in unicodeData");
@@ -97,9 +97,26 @@ static bool single_char_helper(unsigned int cp,
     } else if(s == Common || s == Inherited) {
         // Common and Inherited (combining marks) go with any script
     } else if(!used[s]) {
-        if(++c > 1)
-            return false;
         used[s] = true;
+        c++;
+    }
+    return true;
+}
+
+// Whether every script used is one of those listed. Rule 3 names
+// three combinations that count as a single script, so counting
+// distinct scripts isn't enough on its own.
+static bool within(const bool (& used)[256],
+		   std::initializer_list<Script> family) {
+    for(int s = 0; s < 256; s++) {
+	if(!used[s])
+	    continue;
+	bool found = false;
+	for(Script f : family)
+	    if(f == s)
+		found = true;
+	if(!found)
+	    return false;
     }
     return true;
 }
@@ -194,6 +211,14 @@ bool smtputf8_syntax_valid(const std::wstring s) {
         }
 	pos++;
     }
+    // Rule 3. Japanese uses Han, Hiragana and Katakana together, so
+    // those three count as one script, as do Han with Hangul and Han
+    // with Bopomofo.
+    if(scripts > 1 &&
+       !within(used, { Han, Hiragana, Katakana }) &&
+       !within(used, { Han, Hangul }) &&
+       !within(used, { Han, Bopomofo }))
+	return false;
     if(hiraganaKatakanaHanNeeded &&
        !used[Hiragana] && !used[Katakana] && !used[Han])
 	return false;
@@ -248,6 +273,8 @@ static const struct {
     { "cel·la@example.com", true },
     { "cex·xa@example.com", false },
     { "\u0660\u06F0@example.com", false },
+    { "まり子@まり子.日本", true },
+    { "지훈@まり子.日本", false },
 };
 
 int main(int argc, char ** argv) {
