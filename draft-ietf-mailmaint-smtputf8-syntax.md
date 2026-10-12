@@ -210,7 +210,9 @@ make an address difficult to cut and paste.
 
 # Acknowledgments
 
-The authors wish to thank John C. Klensin, (your name here, please)
+The authors wish to thank John C. Klensin,
+Daniel Eggert, Andrew Gallagher, Jeffrey Stedfast, Pete Resnick,
+(your name here, please)
 
 (Wow, the ack section is already outdated)
 
