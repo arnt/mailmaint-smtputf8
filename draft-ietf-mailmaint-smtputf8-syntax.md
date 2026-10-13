@@ -131,7 +131,7 @@ PRECIS is described in {{RFC8264}}, and the IdentifierClass in section
 
 # Rules
 
-The following three rules apply to the
+The following four rules apply to the
 {{I-D.ietf-emailcore-rfc5322bis}} mailbox production, as indirectly
 extended by {{RFC6532}}.
 
@@ -150,8 +150,10 @@ and é is non-ASCII. The single é is in a single script, so the word
 contains only one script. まり子 is Hiragana and Han, which count as
 one.)
 
+4. An address MUST be in the unicode NFC form.
+
 This does not affect rules in other documents. For example,
-{{RFC952}}], {{RFC5891}} and others specify rules on domain names,
+{{RFC952}}, {{RFC5891}} and others specify rules on domain names,
 which implicitly affect which email addresses are permitted on the
 public internet. Domain registries often have policies regarding which
 names may be registered.
