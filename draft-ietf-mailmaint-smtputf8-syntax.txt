@@ -6,7 +6,7 @@ mailmaint                                                 A. Gulbrandsen
 Internet-Draft                                                     ICANN
 Updates: 6532 (if approved)                                       J. Yao
 Intended status: Standards Track                                   CNNIC
-Expires: 14 March 2027                                 10 September 2026
+Expires: 16 April 2027                                   13 October 2026
 
 
                         SMTPUTF8 Email Addresses
@@ -15,9 +15,9 @@ Expires: 14 March 2027                                 10 September 2026
 Abstract
 
    RFC 6532 extends the internet email format to allow UTF8 in many
-   contexts.  This document restricts the set of allowed addresses in
-   header fields slightly, and thereby simplifies use of these
-   addresses.
+   contexts.  This document updates RFC 6532 and restricts the set of
+   allowed addresses in header fields slightly, and thereby simplifies
+   use of these addresses.
 
    This is one of a pair of documents.  This one is simple to implement
    and contains only globally viable rules.  Its companion has more
@@ -51,7 +51,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 March 2027.
+   This Internet-Draft will expire on 16 April 2027.
 
 Copyright Notice
 
@@ -79,9 +79,9 @@ Table of Contents
    8.  References
      8.1.  Normative References
      8.2.  Informative References
-   Appendix A.  Testing
-   Appendix B.  Acknowledgments
-   Appendix C.  Instructions to the RFC editor
+   Appendix A.  Acknowledgments
+   Appendix B.  Instructions to the RFC editor
+   Appendix C.  Testing
    Appendix D.  Open issues
    Authors' Addresses
 
@@ -147,9 +147,8 @@ Table of Contents
 
 4.  Rules
 
-   The following three rules apply to the
-   [I-D.ietf-emailcore-rfc5322bis] mailbox production, as indirectly
-   extended by [RFC6532].
+   The following four rules apply to the [I-D.ietf-emailcore-rfc5322bis]
+   mailbox production, as indirectly extended by [RFC6532].
 
    1.  An atom in an address MUST NOT be an a-label (e.g. xn--dmi-0na).
 
@@ -159,9 +158,20 @@ Table of Contents
        satisfy that rule ([RFC5892] Appendix A).
 
    3.  An address MUST NOT contain more than one script, when ASCII is
-       disregarded.  (For example: In the word Orléans, Orl and ans are
-       ASCII and é is non-ASCII.  The single é is in a single script, so
-       the word contains only one script.)
+       disregarded.  Han, Hiragana and Katakana count as one script
+       here, since Japanese uses all three together; so do Han and
+       Hangul, and Han and Bopomofo.  (For example: In the word Orléans,
+       Orl and ans are ASCII and é is non-ASCII.  The single é is in a
+       single script, so the word contains only one script. まり子 is
+       Hiragana and Han, which count as one.)
+
+   4.  An address MUST be in the unicode NFC form.
+
+   This does not affect rules in other documents.  For example,
+   [RFC952], [RFC5891] and others specify rules on domain names, which
+   implicitly affect which email addresses are permitted on the public
+   internet.  Domain registries often have policies regarding which
+   names may be registered.
 
 5.  Examples
 
@@ -185,10 +195,19 @@ Table of Contents
    elongates the preceding letter, and would let one address be spelled
    in any number of ways.
 
+   The address まり子@まり子.日本 is permitted, because 1) it contains no
+   a-label, 2) the IdentifierClass permits every code point in it and 3)
+   Hiragana and Han count as one script.
+
    阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
    dømi@dømi.fo is legal because it contains ASCII and Latin, but
    阿Q正传@dømi.fo is not, because it contains both Han (阿) and Latin non-
    ASCII (ø).
+
+   example@-example-.example.com is permitted by the rules above.
+   However, since [RFC952] and its successors prohibit both of the
+   hyphens, that email address is effectively not permitted on the
+   internet.
 
 6.  IANA Considerations
 
@@ -204,6 +223,13 @@ Table of Contents
 
    The rules in this document permit a number of code points that can
    make an address difficult to cut and paste.
+
+   This document does not change the longstanding rule that addresses
+   may be either case-sensitive or case-insensitive.  However, UTF8 adds
+   an extra wrinkle: case conversion depends on the locale.  When
+   processing addresses in remote domains, one cannot be sure which
+   conversion rules apply.  Implementers may want to consider unusual
+   cases such as the Turkish dotless ı.
 
 8.  References
 
@@ -224,11 +250,6 @@ Table of Contents
               Internationalized Domain Names for Applications (IDNA)",
               RFC 5892, DOI 10.17487/RFC5892, August 2010,
               <https://www.rfc-editor.org/rfc/rfc5892>.
-
-   [RFC6365]  Hoffman, P. and J. Klensin, "Terminology Used in
-              Internationalization in the IETF", BCP 166, RFC 6365,
-              DOI 10.17487/RFC6365, September 2011,
-              <https://www.rfc-editor.org/rfc/rfc6365>.
 
    [RFC6530]  Klensin, J. and Y. Ko, "Overview and Framework for
               Internationalized Email", RFC 6530, DOI 10.17487/RFC6530,
@@ -255,10 +276,9 @@ Table of Contents
 
 8.2.  Informative References
 
-   [RFC3490]  Faltstrom, P., Hoffman, P., and A. Costello,
-              "Internationalizing Domain Names in Applications (IDNA)",
-              RFC 3490, DOI 10.17487/RFC3490, March 2003,
-              <https://www.rfc-editor.org/rfc/rfc3490>.
+   [RFC952]   Harrenstien, K., Stahl, M., and E. Feinler, "DoD Internet
+              host table specification", RFC 952, DOI 10.17487/RFC952,
+              October 1985, <https://www.rfc-editor.org/rfc/rfc952>.
 
    [RFC5891]  Klensin, J., "Internationalized Domain Names in
               Applications (IDNA): Protocol", RFC 5891,
@@ -282,15 +302,26 @@ Table of Contents
    [UAX24]    Whistler, K., "Unicode Script Property", 31 July 2025,
               <https://unicode.org/reports/tr24>.
 
-   [UMLAUT]   "Metal Umlaut", n.d.,
-              <https://en.wikipedia.org/wiki/Metal_umlaut>.
+Appendix A.  Acknowledgments
 
-   [TYPE_EMAIL]
-              "WHATWG input type=email", n.d.,
-              <https://html.spec.whatwg.org/multipage/input.html#email-
-              state-(type=email)>.
+   The authors wish to thank John C.  Klensin, Daniel Eggert, Andrew
+   Gallagher, Jeffrey Stedfast, Pete Resnick, (your name here, please)
 
-Appendix A.  Testing
+   (Wow, the ack section is already outdated)
+
+   Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
+   examples and documentation.
+
+   阿Q正传 is a famous Chinese novella, 阿Q is the main character.
+
+Appendix B.  Instructions to the RFC editor
+
+   Please remove all mentions of the Protocol Police before publication
+   (including this sentence).
+
+   Please remove the Open Issues section.
+
+Appendix C.  Testing
 
    This is a set of test addresses in JSON format.
 
@@ -304,38 +335,13 @@ Appendix A.  Testing
    Note to IETF reviewers: The tests will be included here shortly
    before publication (and after IETF Last Call).
 
-Appendix B.  Acknowledgments
-
-   The authors wish to thank John C.  Klensin, (your name here, please)
-
-   (Wow, the ack section is already outdated)
-
-   Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
-   examples and documentation.
-
-   阿Q正传 is a famous Chinese novella, 阿Q is the main character.
-
-Appendix C.  Instructions to the RFC editor
-
-   Please remove all mentions of the Protocol Police before publication
-   (including this sentence).
-
-   Please remove the Open Issues section.
-
 Appendix D.  Open issues
 
-   1.  Wording to identify destiny; I think this should probably become
-       a proposed standard and modify a couple of RFCs, but I'm
-       uncertain about some details and left that open now.
-
-   2.  More words on the relationship between this and the companion.
+   1.  More words on the relationship between this and the companion.
        There are several parallel differences, maybe this warrants a
        section of its own.
 
-   3.  Should this even mention the requirements placed on domains by
-       IDNA, ICANN, web browsers and others?
-
-   4.  SHOULD or MUST not contain a-labels?
+   2.  SHOULD or MUST not contain a-labels?
 
 Authors' Addresses
 
