@@ -208,6 +208,13 @@ REPLACEMENT CHARACTER. There are also other options.
 The rules in this document permit a number of code points that can
 make an address difficult to cut and paste.
 
+This document does not change the longstanding rule that addresses may
+be either case-sensitive or case-insensitive. However, UTF8 adds an
+extra wrinkle: case conversion depends on the locale. When processing
+addresses in remote domains, one cannot be sure which conversion rules
+apply. Implementers may want to consider unusual cases such as the
+Turkish dotless ı.
+
 --- back
 
 # Acknowledgments
