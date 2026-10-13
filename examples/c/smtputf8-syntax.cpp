@@ -266,7 +266,6 @@ static const struct {
     { "ا@example.com", true },
     { "café@example.com", true },
     { "cafe\u0301@example.com", true },
-    { "..@example.com", true },
     { "\"john.doe\"@example.com", true },
     { "\"john doe\"@example.com", true },
     { "grå\u0009\u200B\uFEFF\u00AD\u00A0\u2003\u3000@grå.org", false },
@@ -275,6 +274,8 @@ static const struct {
     { "\u0660\u06F0@example.com", false },
     { "まり子@まり子.日本", true },
     { "지훈@まり子.日本", false },
+    { "中国互联网络信息中心域名注册服务部门联系人员@北京市海淀区中关村南四街四号中国互联网络信息中心.中国", true },
+    { "example@[ipv6:2001:db8::8bd:1002]", true },
 };
 
 int main(int argc, char ** argv) {

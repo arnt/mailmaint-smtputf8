@@ -218,6 +218,18 @@
 	"address": "지훈@まり子.日本",
 	"valid": false,
 	"comment": "Hangul counts as one script together with Han, and Hiragana does too, but no combination permits a combination of all three"
+    },
+    {
+	"address": "中国互联网络信息中心域名注册服务部门联系人员@北京市海淀区中关村南四街四号中国互联网络信息中心.中国",
+	"valid": true,
+	"interoperable": false,
+	"comment": "the localpart is 22 characters but 66 UTF-8 bytes, and the first label of the domain is 24 characters but 71 bytes in a-label form; these rules don't limit length so it's uh... valid, but RFC5321 limits a localpart to 64 octets and the DNS limits a label to 63 so it really is not"
+    },
+    {
+	"address": "example@[ipv6:2001:db8::8bd:1002]",
+	"valid": true,
+	"interoperable": false,
+	"comment": "valid since it does not contravene the smtputf8-syntax rules, but not interoperable since WHATWG blocks domain literals"
     }
 ]
 
