@@ -33,14 +33,12 @@ normative:
   I-D.ietf-emailcore-rfc5322bis:
   RFC5890:
   RFC5892:
-  RFC6365:
   RFC6530:
   RFC6532:
   RFC8264:
 
 informative:
   RFC952:
-  RFC3490:
   RFC5891:
   RFC6533:
   RFC6854:
@@ -52,18 +50,13 @@ informative:
     author:
       -
         name: Ken Whistler
-  UMLAUT:
-    target: https://en.wikipedia.org/wiki/Metal_umlaut
-    title: Metal Umlaut
-  TYPE=EMAIL:
-    title: WHATWG input type=email
-    target: https://html.spec.whatwg.org/multipage/input.html#email-state-(type=email)
 
 --- abstract
 
 RFC 6532 extends the internet email format to allow UTF8 in many
-contexts. This document restricts the set of allowed addresses in
-header fields slightly, and thereby simplifies use of these addresses.
+contexts. This document updates RFC 6532 and restricts the set of
+allowed addresses in header fields slightly, and thereby simplifies
+use of these addresses.
 
 This is one of a pair of documents. This one is simple to implement
 and contains only globally viable rules. Its companion has more
