@@ -174,14 +174,14 @@ bool smtputf8_syntax_valid(const std::wstring s) {
 	    if(cp < 0x20 || cp == 0x7f)
 		return false;
 	} else if(cp == 0xB7) {
-	    // RFC 5892 Appendix A.3
+	    // RFC 5892 Appendix A.3 asks for U+006C on both sides.
+	    // IDNA2008 case-folds before it gets that far, so A.3
+	    // never sees an L. The IdentifierClass may see upper
+	    // case.
 	    if(pos == 0 || pos+1 >= s.length())
 		return false; // not between two letters
-	    if(s[pos-1] == 'l' && s[pos+1] == 'l')
-		; // lower case ela geminada
-	    else if(s[pos-1] == 'L' && s[pos+1] == 'L')
-		;// upper case ela geminada
-	    else
+	    if((s[pos-1] != 'l' && s[pos-1] != 'L') ||
+	       (s[pos+1] != 'l' && s[pos+1] != 'L'))
 		return false; // some other middle dot
 	} else if(cp == 0x375) {
 	    // RFC 5892 Appendix A.4
