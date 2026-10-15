@@ -151,6 +151,10 @@ which implicitly affect which email addresses are permitted on the
 public internet. Domain registries often have policies regarding which
 names may be registered.
 
+These rules constrain the generation of addresses. This document does
+not require receivers to reject, alter or normalise non-conforming
+addresses.
+
 # Examples
 
 example@example.com is permitted, because 1) it does not contain any
@@ -186,6 +190,19 @@ However, since {{RFC952}} and its successors prohibit both of the
 hyphens, that email address is effectively not permitted on the
 internet.
 
+# Old stored messages
+
+This section is informative.
+
+A mailstore may contain old messages that do not conform to the rules
+of this document, or indeed any RFC. Two typical examples may be To:
+info@xn--dm-0na.fo and To: =?ISO-8859-1?Q?info@d=F8mi.fo?=. A more
+confusing example is ali[U+202E]moc.elpmaxe@kravdraa.ec, which could
+be rendered as alice.aardvark@example.com (U+202E changes display
+direction). It is advisable to be careful about how to display an
+address to users if that address does not conform to the rules in this
+document.
+
 # IANA Considerations {#IANA}
 
 This document does not require any actions from the IANA.
@@ -214,6 +231,7 @@ Turkish dotless ı.
 
 The authors wish to thank John C. Klensin,
 Daniel Eggert, Andrew Gallagher, Jeffrey Stedfast, Pete Resnick,
+Narendra Singh Bisht,
 (your name here, please)
 
 (Wow, the ack section is already outdated)
