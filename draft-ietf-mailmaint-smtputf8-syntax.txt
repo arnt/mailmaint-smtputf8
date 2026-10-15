@@ -6,7 +6,7 @@ mailmaint                                                 A. Gulbrandsen
 Internet-Draft                                                     ICANN
 Updates: 6532 (if approved)                                       J. Yao
 Intended status: Standards Track                                   CNNIC
-Expires: 16 April 2027                                   13 October 2026
+Expires: 18 April 2027                                   15 October 2026
 
 
                         SMTPUTF8 Email Addresses
@@ -51,7 +51,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 April 2027.
+   This Internet-Draft will expire on 18 April 2027.
 
 Copyright Notice
 
@@ -74,11 +74,12 @@ Table of Contents
    3.  Terminology
    4.  Rules
    5.  Examples
-   6.  IANA Considerations
-   7.  Security Considerations
-   8.  References
-     8.1.  Normative References
-     8.2.  Informative References
+   6.  Old stored messages
+   7.  IANA Considerations
+   8.  Security Considerations
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Appendix A.  Acknowledgments
    Appendix B.  Instructions to the RFC editor
    Appendix C.  Testing
@@ -173,6 +174,10 @@ Table of Contents
    internet.  Domain registries often have policies regarding which
    names may be registered.
 
+   These rules constrain the generation of addresses.  This document
+   does not require receivers to reject, alter or normalise non-
+   conforming addresses.
+
 5.  Examples
 
    example@example.com is permitted, because 1) it does not contain any
@@ -209,11 +214,24 @@ Table of Contents
    hyphens, that email address is effectively not permitted on the
    internet.
 
-6.  IANA Considerations
+6.  Old stored messages
+
+   This section is informative.
+
+   A mailstore may contain old messages that do not conform to the rules
+   of this document, or indeed any RFC.  Two typical examples may be To:
+   info@xn--dm-0na.fo and To: =?ISO-8859-1?Q?info@d=F8mi.fo?=. A more
+   confusing example is ali[U+202E]moc.elpmaxe@kravdraa.ec, which could
+   be rendered as alice.aardvark@example.com (U+202E changes display
+   direction).  It is advisable to be careful about how to display an
+   address to users if that address does not conform to the rules in
+   this document.
+
+7.  IANA Considerations
 
    This document does not require any actions from the IANA.
 
-7.  Security Considerations
+8.  Security Considerations
 
    When a program renders a non-ASCII email address string on-screen or
    stores it as a string (e.g. in a system log file), the address shown
@@ -231,9 +249,9 @@ Table of Contents
    conversion rules apply.  Implementers may want to consider unusual
    cases such as the Turkish dotless ı.
 
-8.  References
+9.  References
 
-8.1.  Normative References
+9.1.  Normative References
 
    [I-D.ietf-emailcore-rfc5322bis]
               Resnick, P., "Internet Message Format", Work in Progress,
@@ -274,7 +292,7 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-8.2.  Informative References
+9.2.  Informative References
 
    [RFC952]   Harrenstien, K., Stahl, M., and E. Feinler, "DoD Internet
               host table specification", RFC 952, DOI 10.17487/RFC952,
@@ -305,7 +323,8 @@ Table of Contents
 Appendix A.  Acknowledgments
 
    The authors wish to thank John C.  Klensin, Daniel Eggert, Andrew
-   Gallagher, Jeffrey Stedfast, Pete Resnick, (your name here, please)
+   Gallagher, Jeffrey Stedfast, Pete Resnick, Narendra Singh Bisht,
+   (your name here, please)
 
    (Wow, the ack section is already outdated)
 
