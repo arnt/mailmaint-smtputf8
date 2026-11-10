@@ -210,17 +210,20 @@ This document does not require any actions from the IANA.
 # Security Considerations {#SECURITY}
 
 When a program renders a non-ASCII email address string on-screen or
-stores it as a string (e.g. in a system log file), the address shown
-to the eventual human may not be as intended. One possible way to
-diminish the risk is to replace impermissible code points with U+FFFD,
-REPLACEMENT CHARACTER. There are also other options.
+stores it as a string (e.g. as part of a line of text in a system log
+file), the address eventually shown to a human may not be as desired.
+One possible way to diminish the risk is to replace impermissible code
+points with U+FFFD, REPLACEMENT CHARACTER. There are also other
+options. Note that changing an entire email message in this way risks
+invalidating signatures such as DKIM.
 
 The rules in this document permit a number of code points that can
 make an address difficult to cut and paste.
 
-This document does not change the longstanding rule that addresses may
-be either case-sensitive or case-insensitive. However, UTF8 adds an
-extra wrinkle: case conversion depends on the locale. When processing
+RFC 5321 section 4.1.2 advises those who define mailboxes to avoid
+case-sensitive localparts, and RFC 6530 section 10.1 advises them to
+support other normalization forms of the same localpart. RFC 8264
+section 5.2.3 discusses some options for case mapping. When processing
 addresses in remote domains, one cannot be sure which conversion rules
 apply. Implementers may want to consider unusual cases such as the
 Turkish dotless ı.
