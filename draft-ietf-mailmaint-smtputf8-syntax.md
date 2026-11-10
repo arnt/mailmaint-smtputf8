@@ -152,9 +152,9 @@ that rule (defined in {{RFC8264}} and described in depth in
 disregarded. Han, Hiragana and Katakana count as one script here,
 since Japanese uses all three together; so do Han and Hangul, and Han
 and Bopomofo. (For example: In the word Orléans, Orl and ans are ASCII
-and é is non-ASCII. The single é is in a single script, so the word
-contains only one script. まり子 is Hiragana and Han, which count as
-one.)
+and é is non-ASCII. Disregarding ASCII leaves a single é, necessarily
+a single script, so the word contains only one script. Another
+example: まり子 is Hiragana and Han, which count as one.)
 
 4. An address MUST be in the Unicode NFC form (see {{UAX15}}).
 
@@ -176,9 +176,9 @@ A-label, 2) it consists entirely of permissible code points, 3) it
 contains no non-ASCII code points at all and 4) it is in NFC form.
 
 The address dømi@dømi.fo is permitted, because 1) it does not contain
-any A-label, 2) the IdentifierClass permits every code point in it,
-3) it consists entirely of 'Latin' and 'Common' code points (and ./@)
-and 4) it is in NFC form.
+any A-label, 2) the IdentifierClass permits every code point in it, 3)
+it consists entirely of 'Latin' and 'Common' code points and 4) it is
+in NFC form.
 
 The address U+200E '@' U+200F '.' U+200E is not permitted, because 2)
 the IdentifierClass disallows U+200E and U+200F as ignorable code
