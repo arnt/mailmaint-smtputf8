@@ -1,14 +1,14 @@
 ---
 stand_alone: true
 ipr: trust200902
-cat: std
+cat: bcp
 submissiontype: IETF
 area: "Applications and Real-Time"
 wg: mailmaint
 
 docname: draft-ietf-mailmaint-interoperable-addresses-latest
 
-title: Interoperable Email Addresses for SMTPUTF8
+title: Provisioning Interoperable SMTPUTF8 Email Addresses
 abbrev: UTF8=ACCEPT
 lang: en
 kw:
@@ -30,7 +30,7 @@ author:
   email: yaojk@cnnic.cn
 
 normative:
-  RFC5322:
+  I-D.ietf-emailcore-rfc5322bis:
   RFC5890:
   RFC6365:
   RFC6530:
@@ -51,6 +51,13 @@ informative:
     author:
       -
         name: Ken Whistler
+  UAX31:
+    target: https://unicode.org/reports/tr31
+    title: Unicode Identifiers and Syntax
+    date: 2025-08-20
+    author:
+      -
+        name: Mark Davis
   UMLAUT:
     target: https://en.wikipedia.org/wiki/Metal_umlaut
     title: Metal Umlaut
@@ -60,17 +67,22 @@ informative:
 
 --- abstract
 
-This document specifies rules for email addresses that are flexible
-enough to express the addresses typically used with SMTPUTF8, while
-avoiding elements that harm human-to-human interoperation.
+This document recommends a best current practice for systems that
+provision SMTPUTF8 email addresses, that is, that decide which
+addresses to create for their users. It recommends provisioning only
+addresses that
 
-This is one of a pair of documents: this contains recommendations for
-what addresses humans should use, such that address provisioning
-systems can restrain themselves to addresses that email valdidators
-accept. (This set can also be described in other ways, including
-"simple to cut-and-paste" and "understandable by some community".) Its
-companion defines simpler rules, accepts more addresses, and is
-intended for software like MTAs.
+ - are easy to read within some community,
+ - are easy to cut and paste, and
+ - are unlikely to be rejected by email validator software.
+
+This is one of a pair of documents. This one recommends what a
+provisioning system should create. Its companion is simpler and more
+permissive, and is intended for software that has to display an address
+received from a potentially malevolent source. Neither document changes
+the address syntax: the addresses recommended here are a subset of
+those that RFC6532 permits, chosen to pass the validators that
+implement RFC5322bis or the WHATWG email syntax.
 
 --- middle
 
@@ -92,24 +104,39 @@ worrying.
 The flexibility has caused considerable reluctance to support the full
 syntax in contexts such as web form address validation.
 
-This document attempts to describe rules that:
+This document describes rules that identify addresses suitable for a
+provisioning system to create, and recommends that such systems create
+only addresses that satisfy them. The rules —
 
-1. includes the addresses that users generally want to use for
-themselves and organizations want to provision for their employees.
+1. include the addresses that users generally want for themselves and
+that organizations want to provision for their staff;
 
-2. includes the addresses that have been used significantly, even if not
-exactly what users wanted.
+2. include the addresses that have been used significantly, even if not
+exactly what users wanted;
 
-3. excludes confusable things.
+3. exclude confusable things;
 
-4. excludes things that have been described as security risks.
+4. exclude things that have been described as security risks; and
 
-5. Looks safe at first glance to implementers (including ones with
-limited knowledge of unicode).
+5. are visibly safe to implementers, including ones with limited
+knowledge of Unicode.
 
 These goals are somewhat aspirational. For example, lower-case L and
-upper-case i are confusable and cannot realistically be disallowed,
+upper-case i are confusable and cannot realistically be disallowed;
 the protocol poLIce would arrest us all.
+
+These rules select a subset of the addresses that {{RFC6532}} permits.
+This document adds no new syntax and updates no other specification. An
+interoperable address is valid SMTPUTF8, and rule 2 keeps the all-ASCII
+ones compatible with validators built on {{I-D.ietf-emailcore-rfc5322bis}}
+or the WHATWG {{TYPE=EMAIL}} syntax.
+
+Considerable thought has also been given to nonstandard email address
+validators and to non-email use of addresses. For example, some
+software uses email-like identifiers for logging in. Some
+implementations are based on {{TYPE=EMAIL}}, some on {{UAX31}}, some
+on word of mouth, and many are closed-source or SaaS. It is hoped that
+addresses matching these five rules will be maximally compatible.
 
 # Requirements Language
 
@@ -256,14 +283,17 @@ as broadly similar to the Common LGR and different in detail.
 
 # Rules for interoperable email addresses
 
-Based on the above descriptions, the following rules are formulated
-for interoperable email addresses.
+Based on the above descriptions, the following rules identify an
+address as interoperable. A system that provisions SMTPUTF8 email
+addresses SHOULD create only interoperable addresses. An address is
+interoperable only if it satisfies all five rules.
 
 1. An atom in an interoperable address MUST NOT be an a-label.
 
-2. If the address matches the grammar in {{RFC5322}}, then in order to
-be interoperable it MUST also match the grammar specified by the W3C
-WHATWG {{TYPE=EMAIL}} spec.
+2. If the address matches the grammar in
+{{I-D.ietf-emailcore-rfc5322bis}}, then in order to be interoperable
+it MUST also match the grammar specified by the W3C WHATWG
+{{TYPE=EMAIL}} spec.
 
 3. An address MUST conform to the PRECIS IdentifierClass and use
 the NFC form.
@@ -286,8 +316,8 @@ following conditions MUST apply:
       Common, or are ASCII.
 
 The above rules do not modify the permitted length as specified in
-(RFC goes here, perhaps still 5322). The maximum length remains 64
-bytes, which will often be less than 64 unicode codepoints.
+{{I-D.ietf-emailcore-rfc5322bis}}. The maximum length of a localpart
+remains 64 bytes, which will often be less than 64 unicode codepoints.
 
 # Examples
 
@@ -307,7 +337,7 @@ The address U+627 '@' '2' '.' '3' is interoperable.  (U+627 is an
 arabic letter, written right-to-left.) It is interoperable because 1)
 it does not contain any a-label, 2) does not apply, 3) it consists
 entirely of permissible code points, 4) the only right-to-left code
-points used are ASCII digits and 6) all code points are 'Arabic' or
+points used are ASCII digits and 5) all code points are 'Arabic' or
 ASCII digits (or @/).
 
 (Note that it's interoperable even though its top-level domain cannot
@@ -374,7 +404,8 @@ the localpart and the domain part can be rendered on the same side of
 the '@'. This can create the appearance that a different domain signed
 the message.
 
-The rules in this document permit a number of code points that
+The rules in this document permit a number of code points that can
+make it difficult to cut and paste.
 
 --- back
 
@@ -397,13 +428,13 @@ publication (and after IETF Last Call).
 # Acknowledgments
 
 The authors wish to thank John C. Klensin, Jeremy Harris,
-Daniel Eggert,
+Daniel Eggert, Pete Resnick, Barry Leiba,
 (your name here, please)
 
 Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
 examples and documentation.
 
-阿Q正传@ is a famous Chinese novella, 阿Q is the main character.
+阿Q正传 is a famous Chinese novella, 阿Q is the main character.
 
 # Rationales for each condition
 
@@ -448,9 +479,14 @@ Please remove the Open Issues section.
 
 # Open issues
 
-1. Metal umlauts might be a problem. Accents are used sometimes with
-   non-latin, but very seldom and might be seen as surprising to native
-   users of e.g. cyrillic, even if Åквариум exists.
-   https://krebsonsecurity.com/2022/11/disneyland-malware-team-its-a-puny-world-after-all/
-   is worth considering. Not entirely clear how to subdivide the
-   Common script so it can be used with some scripts, not with others.
+1. U+200D ZWJ
+
+2. Check diffs with UTS58
+
+3. RFC5321 blockage
+
+4. Directionality, we don't add extra rules
+
+5. Updating RFC6532
+
+6.
