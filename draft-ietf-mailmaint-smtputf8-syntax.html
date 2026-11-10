@@ -8,33 +8,29 @@
 <meta content="Arnt Gulbrandsen" name="author">
 <meta content="Jiankang Yao" name="author">
 <meta content="
-       RFC 6532 extends the internet email format to allow UTF8 in many
-contexts. This document updates RFC 6532 and restricts the set of
-allowed addresses in header fields slightly, and thereby simplifies
-use of these addresses. 
-       This is one of a pair of documents. This one is simple to implement
-and contains only globally viable rules. Its companion has more
-complex rules, takes regional usage into account, and describes
-addresses that can be read by some community and cut-and-pasted in
-some locale. 
+       This document updates the email address syntax to a set that includes
+the addresses in active use, includes the addresses likely to be used
+based on what writing systems are used together, and excludes
+addresses that pose risks when recipient software renders or processes
+them. It updates RFC 6532. 
     " name="description">
-<meta content="xml2rfc 3.34.1" name="generator">
+<meta content="xml2rfc 3.35.0" name="generator">
 <meta content="email" name="keyword">
 <meta content="draft-ietf-mailmaint-smtputf8-syntax-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.34.1
-    Python 3.14.8
-    ConfigArgParse 1.8.0
+  xml2rfc 3.35.0
+    Python 3.14.10
+    ConfigArgParse 1.9.0
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.12.2
+    platformdirs 4.14.3
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.9.1
+    wcwidth 0.9.4
 -->
 <link href="draft-ietf-mailmaint-smtputf8-syntax.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1035,7 +1031,7 @@ svg {
   & :is([stroke="white"], [stroke^="#fff"]) {
     stroke: var(--background-color);
   }
-  & :is([fill="black"], [fill^="#000"], :not([fill])) {
+  & :is([fill="black"], [fill^="#000"], :not([fill], [fill] *)) {
     fill: var(--text-color);
   }
   & :is([fill="white"], [fill^="#fff"]) {
@@ -1050,11 +1046,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SMTPUTF8 Email Addresses</td>
-<td class="right">October 2026</td>
+<td class="right">November 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Gulbrandsen &amp; Yao</td>
-<td class="center">Expires 18 April 2027</td>
+<td class="center">Expires 14 May 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1070,12 +1066,12 @@ svg {
 <a href="https://www.rfc-editor.org/rfc/rfc6532" class="eref">6532</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-10-15" class="published">15 October 2026</time>
+<time datetime="2026-11-10" class="published">10 November 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-04-18">18 April 2027</time></dd>
+<dd class="expires"><time datetime="2027-05-14">14 May 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1092,15 +1088,11 @@ svg {
 <h1 id="title">SMTPUTF8 Email Addresses</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">RFC 6532 extends the internet email format to allow UTF8 in many
-contexts. This document updates RFC 6532 and restricts the set of
-allowed addresses in header fields slightly, and thereby simplifies
-use of these addresses.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">This is one of a pair of documents. This one is simple to implement
-and contains only globally viable rules. Its companion has more
-complex rules, takes regional usage into account, and describes
-addresses that can be read by some community and cut-and-pasted in
-some locale.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document updates the email address syntax to a set that includes
+the addresses in active use, includes the addresses likely to be used
+based on what writing systems are used together, and excludes
+addresses that pose risks when recipient software renders or processes
+them. It updates RFC 6532.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-discussion-venues">
@@ -1132,7 +1124,7 @@ some locale.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 April 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 May 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1180,36 +1172,39 @@ some locale.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-old-stored-messages" class="internal xref">Old stored messages</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-relationships-to-other-rfcs" class="internal xref">Relationships to other RFCs</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-references" class="internal xref">References</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-instructions-to-the-rfc-edi" class="internal xref">Instructions to the RFC editor</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref">Appendix C</a>.  <a href="#name-testing" class="internal xref">Testing</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-instructions-to-the-rfc-edi" class="internal xref">Instructions to the RFC editor</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-D" class="auto internal xref">Appendix D</a>.  <a href="#name-open-issues" class="internal xref">Open issues</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-C" class="auto internal xref">Appendix C</a>.  <a href="#name-testing" class="internal xref">Testing</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#appendix-D" class="auto internal xref">Appendix D</a>.  <a href="#name-open-issues" class="internal xref">Open issues</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1220,18 +1215,24 @@ some locale.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1"><span>[<a href="#RFC6530" class="cite xref">RFC6530</a>]</span>-<span>[<a href="#RFC6533" class="cite xref">RFC6533</a>]</span> and <span>[<a href="#RFC6854" class="cite xref">RFC6854</a>]</span>-<span>[<a href="#RFC6858" class="cite xref">RFC6858</a>]</span> extend various
-aspects of the email system to support non-ASCII both in localparts
-and domain parts. In addition, some email software supports unicode in
-domain parts by using encoded domain parts in the SMTP transaction
-("RCPT TO:<a href="mailto:info@xn--dmi-0na.fo">info@xn--dmi-0na.fo</a>") and presenting the unicode version
-(dømi.fo in this case) in the user interface.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">The email address syntax extension is in <span>[<a href="#RFC6532" class="cite xref">RFC6532</a>]</span>, and allows
-almost all UTF8 strings as localparts. While this certainly allows
-everything users want to use, it is also flexible enough to allow many
-things that users and implementers find surprising and sometimes
-worrying. For example, the domain extracted by code may not match that
-shown to users on-screen.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-1"><span>[<a href="#RFC6531" class="cite xref">RFC6531</a>]</span> extends SMTP and <span>[<a href="#RFC6532" class="cite xref">RFC6532</a>]</span> extends message syntax to
+support non-ASCII both in localparts and domain parts. In addition,
+some email software supports Unicode in domain parts by using encoded
+domain parts in the SMTP transaction ("RCPT TO:<a href="mailto:info@xn--dmi-0na.fo">info@xn--dmi-0na.fo</a>")
+and presenting the Unicode version (dømi.fo in this case) in the user
+interface.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">The email address syntax extension in <span>[<a href="#RFC6532" class="cite xref">RFC6532</a>]</span> allows almost all
+UTF8 strings as localparts. While this certainly allows everything
+users want to use, it is also flexible enough to allow many things
+that users and implementers find surprising and sometimes worrying.
+For example, the domain extracted by code may not match that shown to
+users on-screen.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This document defines rules that allow the addresses currently used
+and the addresses that users and implementers have asked for. It
+disallows addresses that cause confusing rendering, including many
+instances of homographic rendering. It does not try to disallow
+anything that is already disallowed by IDNA (see <span>[<a href="#RFC5891" class="cite xref">RFC5891</a>]</span>) or
+by common registry policies (see <span>[<a href="#IDN-TABLES" class="cite xref">IDN-TABLES</a>]</span>).<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="requirements-language">
@@ -1250,11 +1251,10 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-terminology">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
       </h2>
-<p id="section-3-1">Script, in this document, refers to the unicode script property (see
+<p id="section-3-1">Script, in this document, refers to the Unicode script property (see
 <span>[<a href="#UAX24" class="cite xref">UAX24</a>]</span>). Each code point is assigned to one script ("a" is Latin),
 except that some are assigned to "Common" or a few other special
-values. Fraktur and /etc/rc.local aren't scripts in this document, but
-Latin is.<a href="#section-3-1" class="pilcrow">¶</a></p>
+values. "Latin" and "Cyrillic" are examples of scripts.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">Latin refers to those code points that have the script property "Latin"
 in Unicode. Orléans in France and Münster in Germany both have Latin
 names in this document. It also refers to combinations of those code
@@ -1263,17 +1263,17 @@ points from other scripts.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">Han, Cyrillic etc. refer to those code points that have the respective
 script property in Unicode, as well as to strings that contain no code
 points from other scripts.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">ASCII refers to the first 128 code points within unicode, which
+<p id="section-3-4">ASCII refers to the first 128 code points within Unicode, which
 includes the letters A-Z but not É or Ü. It also refers to strings
 that contain only ASCII code points.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">Non-ASCII refers to unicode code points except the first 128, and also
+<p id="section-3-5">Non-ASCII refers to Unicode code points except the first 128, and also
 to strings that contain at least one such code point.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">By way of example, the address info@dømi.fo is latin and non-ASCII,
-its localpart is latin and ASCII, and its domain part is latin and
+<p id="section-3-6">By way of example, the address info@dømi.fo is Latin and non-ASCII,
+its localpart is Latin and ASCII, and its domain part is Latin and
 non-ASCII. 中国 is a Han string in this document, but 阿Q正传 is
 neither a Latin string nor a Han string, because it contains a Latin Q
 and three Han code points.<a href="#section-3-6" class="pilcrow">¶</a></p>
-<p id="section-3-7">The term a-label is defined in <span>[<a href="#RFC5890" class="cite xref">RFC5890</a>]</span> section 2.3.2.1.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-7">The term A-label is defined in <span>[<a href="#RFC5890" class="cite xref">RFC5890</a>]</span> section 2.3.2.1.<a href="#section-3-7" class="pilcrow">¶</a></p>
 <p id="section-3-8">PRECIS is described in <span>[<a href="#RFC8264" class="cite xref">RFC8264</a>]</span>, and the IdentifierClass in section
 4.2 of that document.<a href="#section-3-8" class="pilcrow">¶</a></p>
 </section>
@@ -1288,13 +1288,14 @@ and three Han code points.<a href="#section-3-6" class="pilcrow">¶</a></p>
 extended by <span>[<a href="#RFC6532" class="cite xref">RFC6532</a>]</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4-2">
 <li id="section-4-2.1">
-          <p id="section-4-2.1.1">An atom in an address <span class="bcp14">MUST NOT</span> be an a-label (e.g. xn--dmi-0na).<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.1.1">An atom in an address <span class="bcp14">MUST NOT</span> be an A-label (e.g. xn--dmi-0na).<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-4-2.2">
           <p id="section-4-2.2.1">An address <span class="bcp14">MUST</span> contain only code points that the PRECIS
-IdentifierClass treats as valid, and " ". Where the IdentifierClass
-requires a contextual rule, the address <span class="bcp14">MUST</span> satisfy that rule
-(<span>[<a href="#RFC5892" class="cite xref">RFC5892</a>]</span> Appendix A).<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+IdentifierClass treats as valid, and the U+0020 space. Where the
+IdentifierClass requires a contextual rule, the address <span class="bcp14">MUST</span> satisfy
+that rule (defined in <span>[<a href="#RFC8264" class="cite xref">RFC8264</a>]</span> and described in depth in
+<span>[<a href="#RFC5892" class="cite xref">RFC5892</a>]</span> Appendix A).<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-4-2.3">
           <p id="section-4-2.3.1">An address <span class="bcp14">MUST NOT</span> contain more than one script, when ASCII is
@@ -1306,17 +1307,18 @@ contains only one script. まり子 is Hiragana and Han, which count as
 one.)<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-4-2.4">
-          <p id="section-4-2.4.1">An address <span class="bcp14">MUST</span> be in the unicode NFC form.<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.4.1">An address <span class="bcp14">MUST</span> be in the Unicode NFC form (see <span>[<a href="#UAX15" class="cite xref">UAX15</a>]</span>).<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
-<p id="section-4-3">This does not affect rules in other documents. For example,
-<span>[<a href="#RFC952" class="cite xref">RFC952</a>]</span>, <span>[<a href="#RFC5891" class="cite xref">RFC5891</a>]</span> and others specify rules on domain names,
-which implicitly affect which email addresses are permitted on the
-public internet. Domain registries often have policies regarding which
-names may be registered.<a href="#section-4-3" class="pilcrow">¶</a></p>
-<p id="section-4-4">These rules constrain the generation of addresses. This document does
-not require receivers to reject, alter or normalise non-conforming
-addresses.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-3">These rules do not affect rules in other documents. Most notably,
+domain-names in email addresses are almost always also domain names on
+the public internet, which implies that the rules specified by
+<span>[<a href="#RFC952" class="cite xref">RFC952</a>]</span>, <span>[<a href="#RFC5891" class="cite xref">RFC5891</a>]</span> and others affect email addresses. Domain
+registries often have policies regarding which names may be
+registered.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">These rules constrain how to generate email addresses in email
+messages. This document does not require receivers to reject, alter
+or normalize non-conforming addresses.<a href="#section-4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="examples">
@@ -1325,11 +1327,12 @@ addresses.<a href="#section-4-4" class="pilcrow">¶</a></p>
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
       </h2>
 <p id="section-5-1">example@example.com is permitted, because 1) it does not contain any
-a-label, 2) it consists entirely of permissible code points and 3) it
-contains no non-ASCII code points at all.<a href="#section-5-1" class="pilcrow">¶</a></p>
+A-label, 2) it consists entirely of permissible code points, 3) it
+contains no non-ASCII code points at all and 4) it is in NFC form.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">The address dømi@dømi.fo is permitted, because 1) it does not contain
-any a-label, 2) the IdentifierClass permits every code point in it and
-3) it consists entirely of 'Latin' and 'Common' code points (and ./@).<a href="#section-5-2" class="pilcrow">¶</a></p>
+any A-label, 2) the IdentifierClass permits every code point in it,
+3) it consists entirely of 'Latin' and 'Common' code points (and ./@)
+and 4) it is in NFC form.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">The address U+200E '@' U+200F '.' U+200E is not permitted, because 2)
 the IdentifierClass disallows U+200E and U+200F as ignorable code
 points.<a href="#section-5-3" class="pilcrow">¶</a></p>
@@ -1340,8 +1343,8 @@ disallowed too, although it is a letter by category: it only elongates
 the preceding letter, and would let one address be spelled in any
 number of ways.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <p id="section-5-5">The address まり子@まり子.日本 is permitted, because 1) it contains no
-a-label, 2) the IdentifierClass permits every code point in it and 3)
-Hiragana and Han count as one script.<a href="#section-5-5" class="pilcrow">¶</a></p>
+A-label, 2) the IdentifierClass permits every code point in it, 3)
+Hiragana and Han count as one script and 4) it is in NFC form.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <p id="section-5-6">阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
 dømi@dømi.fo is legal because it contains ASCII and Latin, but
 阿Q正传@dømi.fo is not, because it contains both Han (阿) and Latin
@@ -1360,51 +1363,68 @@ internet.<a href="#section-5-7" class="pilcrow">¶</a></p>
 <p id="section-6-1">This section is informative.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">A mailstore may contain old messages that do not conform to the rules
 of this document, or indeed any RFC. Two typical examples may be To:
-info@xn--dm-0na.fo and To: =?ISO-8859-1?Q?info@d=F8mi.fo?=. A more
-confusing example is ali[U+202E]moc.elpmaxe@kravdraa.ec, which could
+info@xn--dmi-0na.fo and To: =?ISO-8859-1?Q?info@d=F8mi.fo?=. A more
+confusing example is "ali" U+202E "moc.elpmaxe@kravdraa.ec", which could
 be rendered as alice.aardvark@example.com (U+202E changes display
 direction). It is advisable to be careful about how to display an
 address to users if that address does not conform to the rules in this
 document.<a href="#section-6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="IANA">
+<div id="relationships-to-other-rfcs">
 <section id="section-7">
-      <h2 id="name-iana-considerations">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      <h2 id="name-relationships-to-other-rfcs">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-relationships-to-other-rfcs" class="section-name selfRef">Relationships to other RFCs</a>
       </h2>
-<p id="section-7-1">This document does not require any actions from the IANA.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">This section is informative.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">This document does not update <span>[<a href="#RFC6531" class="cite xref">RFC6531</a>]</span>. This is because the ABNF in
+<span>[<a href="#RFC6531" class="cite xref">RFC6531</a>]</span> permits everything this document needs, and the
+restrictions in this document are not needed within SMTP. (For
+example, while a human recipient might be confused by a homograph
+attack or a hard-to-read A-label, a receiving SMTP server can hardly
+be.)<a href="#section-7-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="IANA">
+<section id="section-8">
+      <h2 id="name-iana-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-8-1">This document does not require any actions from the IANA.<a href="#section-8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="SECURITY">
-<section id="section-8">
+<section id="section-9">
       <h2 id="name-security-considerations">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-8-1">When a program renders a non-ASCII email address string on-screen or
-stores it as a string (e.g. in a system log file), the address shown
-to the eventual human may not be as intended. One possible way to
-diminish the risk is to replace impermissible code points with U+FFFD,
-REPLACEMENT CHARACTER. There are also other options.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">The rules in this document permit a number of code points that can
-make an address difficult to cut and paste.<a href="#section-8-2" class="pilcrow">¶</a></p>
-<p id="section-8-3">This document does not change the longstanding rule that addresses may
-be either case-sensitive or case-insensitive. However, UTF8 adds an
-extra wrinkle: case conversion depends on the locale. When processing
+<p id="section-9-1">When a program renders a non-ASCII email address string on-screen or
+stores it as a string (e.g. as part of a line of text in a system log
+file), the address eventually shown to a human may not be as desired.
+One possible way to diminish the risk is to replace impermissible code
+points with U+FFFD, REPLACEMENT CHARACTER. There are also other
+options. Note that changing an entire email message in this way risks
+invalidating signatures such as DKIM.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2">The rules in this document permit a number of code points that can
+make an address difficult to cut and paste.<a href="#section-9-2" class="pilcrow">¶</a></p>
+<p id="section-9-3"><span>[<a href="#RFC5321" class="cite xref">RFC5321</a>]</span> section 4.1.2 advises those who define mailboxes to avoid
+case-sensitive localparts, and <span>[<a href="#RFC6530" class="cite xref">RFC6530</a>]</span> section 10.1 advises them to
+support other normalization forms of the same localpart. <span>[<a href="#RFC8264" class="cite xref">RFC8264</a>]</span>
+section 5.2.3 discusses some options for case mapping. When processing
 addresses in remote domains, one cannot be sure which conversion rules
 apply. Implementers may want to consider unusual cases such as the
-Turkish dotless ı.<a href="#section-8-3" class="pilcrow">¶</a></p>
+Turkish dotless ı.<a href="#section-9-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-9">
+<section id="section-10">
       <h2 id="name-references">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-9.1">
+<section id="section-10.1">
         <h3 id="name-normative-references">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="I-D.ietf-emailcore-rfc5322bis">[I-D.ietf-emailcore-rfc5322bis]</dt>
@@ -1419,9 +1439,9 @@ Turkish dotless ı.<a href="#section-8-3" class="pilcrow">¶</a></p>
         <dd>
 <span class="refAuthor">Faltstrom, P., Ed.</span>, <span class="refTitle">"The Unicode Code Points and Internationalized Domain Names for Applications (IDNA)"</span>, <span class="seriesInfo">RFC 5892</span>, <span class="seriesInfo">DOI 10.17487/RFC5892</span>, <time datetime="2010-08" class="refDate">August 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5892">https://www.rfc-editor.org/rfc/rfc5892</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC6530">[RFC6530]</dt>
+<dt id="RFC6531">[RFC6531]</dt>
         <dd>
-<span class="refAuthor">Klensin, J.</span> and <span class="refAuthor">Y. Ko</span>, <span class="refTitle">"Overview and Framework for Internationalized Email"</span>, <span class="seriesInfo">RFC 6530</span>, <span class="seriesInfo">DOI 10.17487/RFC6530</span>, <time datetime="2012-02" class="refDate">February 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6530">https://www.rfc-editor.org/rfc/rfc6530</a>&gt;</span>. </dd>
+<span class="refAuthor">Yao, J.</span> and <span class="refAuthor">W. Mao</span>, <span class="refTitle">"SMTP Extension for Internationalized Email"</span>, <span class="seriesInfo">RFC 6531</span>, <span class="seriesInfo">DOI 10.17487/RFC6531</span>, <time datetime="2012-02" class="refDate">February 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6531">https://www.rfc-editor.org/rfc/rfc6531</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6532">[RFC6532]</dt>
         <dd>
@@ -1430,6 +1450,14 @@ Turkish dotless ı.<a href="#section-8-3" class="pilcrow">¶</a></p>
 <dt id="RFC8264">[RFC8264]</dt>
         <dd>
 <span class="refAuthor">Saint-Andre, P.</span> and <span class="refAuthor">M. Blanchet</span>, <span class="refTitle">"PRECIS Framework: Preparation, Enforcement, and Comparison of Internationalized Strings in Application Protocols"</span>, <span class="seriesInfo">RFC 8264</span>, <span class="seriesInfo">DOI 10.17487/RFC8264</span>, <time datetime="2017-10" class="refDate">October 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8264">https://www.rfc-editor.org/rfc/rfc8264</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="UAX15">[UAX15]</dt>
+        <dd>
+<span class="refAuthor">Whistler, K.</span>, <span class="refTitle">"Unicode Normalization Forms"</span>, <time datetime="2026-08-22" class="refDate">22 August 2026</time>, <span>&lt;<a href="https://www.unicode.org/reports/tr15">https://www.unicode.org/reports/tr15</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="UAX24">[UAX24]</dt>
+        <dd>
+<span class="refAuthor">Whistler, K.</span>, <span class="refTitle">"Unicode Script Property"</span>, <time datetime="2025-07-31" class="refDate">31 July 2025</time>, <span>&lt;<a href="https://unicode.org/reports/tr24">https://unicode.org/reports/tr24</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -1443,34 +1471,30 @@ Turkish dotless ı.<a href="#section-8-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-9.2">
+<section id="section-10.2">
         <h3 id="name-informative-references">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC952">[RFC952]</dt>
         <dd>
 <span class="refAuthor">Harrenstien, K.</span>, <span class="refAuthor">Stahl, M.</span>, and <span class="refAuthor">E. Feinler</span>, <span class="refTitle">"DoD Internet host table specification"</span>, <span class="seriesInfo">RFC 952</span>, <span class="seriesInfo">DOI 10.17487/RFC952</span>, <time datetime="1985-10" class="refDate">October 1985</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc952">https://www.rfc-editor.org/rfc/rfc952</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC5321">[RFC5321]</dt>
+        <dd>
+<span class="refAuthor">Klensin, J.</span>, <span class="refTitle">"Simple Mail Transfer Protocol"</span>, <span class="seriesInfo">RFC 5321</span>, <span class="seriesInfo">DOI 10.17487/RFC5321</span>, <time datetime="2008-10" class="refDate">October 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5321">https://www.rfc-editor.org/rfc/rfc5321</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC5891">[RFC5891]</dt>
         <dd>
 <span class="refAuthor">Klensin, J.</span>, <span class="refTitle">"Internationalized Domain Names in Applications (IDNA): Protocol"</span>, <span class="seriesInfo">RFC 5891</span>, <span class="seriesInfo">DOI 10.17487/RFC5891</span>, <time datetime="2010-08" class="refDate">August 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5891">https://www.rfc-editor.org/rfc/rfc5891</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC6533">[RFC6533]</dt>
+<dt id="RFC6530">[RFC6530]</dt>
         <dd>
-<span class="refAuthor">Hansen, T., Ed.</span>, <span class="refAuthor">Newman, C.</span>, and <span class="refAuthor">A. Melnikov</span>, <span class="refTitle">"Internationalized Delivery Status and Disposition Notifications"</span>, <span class="seriesInfo">RFC 6533</span>, <span class="seriesInfo">DOI 10.17487/RFC6533</span>, <time datetime="2012-02" class="refDate">February 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6533">https://www.rfc-editor.org/rfc/rfc6533</a>&gt;</span>. </dd>
+<span class="refAuthor">Klensin, J.</span> and <span class="refAuthor">Y. Ko</span>, <span class="refTitle">"Overview and Framework for Internationalized Email"</span>, <span class="seriesInfo">RFC 6530</span>, <span class="seriesInfo">DOI 10.17487/RFC6530</span>, <time datetime="2012-02" class="refDate">February 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6530">https://www.rfc-editor.org/rfc/rfc6530</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC6854">[RFC6854]</dt>
-        <dd>
-<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Update to Internet Message Format to Allow Group Syntax in the "From:" and "Sender:" Header Fields"</span>, <span class="seriesInfo">RFC 6854</span>, <span class="seriesInfo">DOI 10.17487/RFC6854</span>, <time datetime="2013-03" class="refDate">March 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6854">https://www.rfc-editor.org/rfc/rfc6854</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC6858">[RFC6858]</dt>
-        <dd>
-<span class="refAuthor">Gulbrandsen, A.</span>, <span class="refTitle">"Simplified POP and IMAP Downgrading for Internationalized Email"</span>, <span class="seriesInfo">RFC 6858</span>, <span class="seriesInfo">DOI 10.17487/RFC6858</span>, <time datetime="2013-03" class="refDate">March 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6858">https://www.rfc-editor.org/rfc/rfc6858</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="UAX24">[UAX24]</dt>
+<dt id="IDN-TABLES">[IDN-TABLES]</dt>
       <dd>
-<span class="refAuthor">Whistler, K.</span>, <span class="refTitle">"Unicode Script Property"</span>, <time datetime="2025-07-31" class="refDate">31 July 2025</time>, <span>&lt;<a href="https://unicode.org/reports/tr24">https://unicode.org/reports/tr24</a>&gt;</span>. </dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Repository of IDN Practices"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.iana.org/domains/idn-tables">https://www.iana.org/domains/idn-tables</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1497,9 +1521,10 @@ examples and documentation.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
       <h2 id="name-instructions-to-the-rfc-edi">
 <a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-instructions-to-the-rfc-edi" class="section-name selfRef">Instructions to the RFC editor</a>
       </h2>
-<p id="appendix-B-1">Please remove all mentions of the Protocol Police before publication
-(including this sentence).<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">Please remove the Open Issues section.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<p id="appendix-B-1">Please remove the Open Issues section.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">This document uses the form U+0020 to refer to Unicode code points.
+Please change that to the form most commonly used in newish RFCs — or
+leave it if there is no dominant form. I'm too lazy to count today.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="testing">
@@ -1509,13 +1534,13 @@ examples and documentation.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
       </h2>
 <p id="appendix-C-1">This is a set of test addresses in JSON format.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 <p id="appendix-C-2">Below is a verbatim copy of
-https://github.com/arnt/mailmaint-smtputf8/tests.json as it was
+https://github.com/arnt/mailmaint-smtputf8/blob/main/tests.json as it was
 on (date here). It contains a number of strange and unusual code points, so
 cutting and pasting this may not work. Rather, it is recommended to
 either use the rfcstrip tool or download the tests using a command
 such as curl
-https://github.com/arnt/mailmaint-smtputf8/tests.json &gt;
-tests.json.<a href="#appendix-C-2" class="pilcrow">¶</a></p>
+https://raw.githubusercontent.com/arnt/mailmaint-smtputf8/main/tests.json
+&gt; tests.json.<a href="#appendix-C-2" class="pilcrow">¶</a></p>
 <p id="appendix-C-3">Note to IETF reviewers: The tests will be included here shortly before
 publication (and after IETF Last Call).<a href="#appendix-C-3" class="pilcrow">¶</a></p>
 </section>
@@ -1527,12 +1552,7 @@ publication (and after IETF Last Call).<a href="#appendix-C-3" class="pilcrow">�
       </h2>
 <ol start="1" type="1" class="normal type-1" id="appendix-D-1">
 <li id="appendix-D-1.1">
-          <p id="appendix-D-1.1.1">More words on the relationship between this and the
-companion. There are several parallel differences, maybe this warrants
-a section of its own.<a href="#appendix-D-1.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="appendix-D-1.2">
-          <p id="appendix-D-1.2.1"><span class="bcp14">SHOULD</span> or <span class="bcp14">MUST</span> not contain a-labels?<a href="#appendix-D-1.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-D-1.1.1"><span class="bcp14">SHOULD NOT</span> or <span class="bcp14">MUST NOT</span> contain A-labels?<a href="#appendix-D-1.1.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 </section>

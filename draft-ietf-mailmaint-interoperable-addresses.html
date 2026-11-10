@@ -2,40 +2,52 @@
 <html lang="en" class="Internet-Draft">
 <head>
 <meta charset="utf-8">
-<meta content="Arabic,Common,Cyrillic,Han,Latin" name="scripts">
+<meta content="Arabic,Common,Han,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>Interoperable Email Addresses for SMTPUTF8</title>
+<title>Provisioning Interoperable SMTPUTF8 Email Addresses</title>
 <meta content="Arnt Gulbrandsen" name="author">
 <meta content="Jiankang Yao" name="author">
-<meta content='
-       This document specifies rules for email addresses that are flexible
-enough to express the addresses typically used with SMTPUTF8, while
-avoiding elements that harm human-to-human interoperation. 
-       This is one of a pair of documents: this contains recommendations for
-what addresses humans should use, such that address provisioning
-systems can restrain themselves to addresses that email valdidators
-accept. (This set can also be described in other ways, including
-"simple to cut-and-paste" and "understandable by some community".) Its
-companion defines simpler rules, accepts more addresses, and is
-intended for software like MTAs. 
-    ' name="description">
-<meta content="xml2rfc 3.34.1" name="generator">
+<meta content="
+       This document recommends a best current practice for systems that
+provision SMTPUTF8 email addresses, that is, that decide which
+addresses to create for their users. It recommends provisioning only
+addresses that 
+       
+         
+           are easy to read within some community, 
+         
+         
+           are easy to cut and paste, and 
+         
+         
+           are unlikely to be rejected by email validator software. 
+         
+       
+       This is one of a pair of documents. This one recommends what a
+provisioning system should create. Its companion is simpler and more
+permissive, and is intended for software that has to display an address
+received from a potentially malevolent source. Neither document changes
+the address syntax: the addresses recommended here are a subset of
+those that RFC6532 permits, chosen to pass the validators that
+implement RFC5322bis or the WHATWG email syntax. 
+    " name="description">
+<meta content="xml2rfc 3.35.0" name="generator">
 <meta content="email" name="keyword">
 <meta content="draft-ietf-mailmaint-interoperable-addresses-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.34.1
-    Python 3.14.8
-    ConfigArgParse 1.8.0
+  xml2rfc 3.35.0
+    Python 3.14.10
+    ConfigArgParse 1.9.0
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.12.2
+    platformdirs 4.14.3
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.9.1
+    wcwidth 0.9.4
 -->
 <link href="draft-ietf-mailmaint-interoperable-addresses.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1036,7 +1048,7 @@ svg {
   & :is([stroke="white"], [stroke^="#fff"]) {
     stroke: var(--background-color);
   }
-  & :is([fill="black"], [fill^="#000"], :not([fill])) {
+  & :is([fill="black"], [fill^="#000"], :not([fill], [fill] *)) {
     fill: var(--text-color);
   }
   & :is([fill="white"], [fill^="#fff"]) {
@@ -1051,11 +1063,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">UTF8=ACCEPT</td>
-<td class="right">October 2026</td>
+<td class="right">November 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Gulbrandsen &amp; Yao</td>
-<td class="center">Expires 18 April 2027</td>
+<td class="center">Expires 14 May 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1080,12 @@ svg {
 <dd class="internet-draft">draft-ietf-mailmaint-interoperable-addresses-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-10-15" class="published">15 October 2026</time>
+<time datetime="2026-11-10" class="published">10 November 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
-<dd class="intended-status">Standards Track</dd>
+<dd class="intended-status">Best Current Practice</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-04-18">18 April 2027</time></dd>
+<dd class="expires"><time datetime="2027-05-14">14 May 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1087,19 +1099,31 @@ svg {
 </dd>
 </dl>
 </div>
-<h1 id="title">Interoperable Email Addresses for SMTPUTF8</h1>
+<h1 id="title">Provisioning Interoperable SMTPUTF8 Email Addresses</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document specifies rules for email addresses that are flexible
-enough to express the addresses typically used with SMTPUTF8, while
-avoiding elements that harm human-to-human interoperation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">This is one of a pair of documents: this contains recommendations for
-what addresses humans should use, such that address provisioning
-systems can restrain themselves to addresses that email valdidators
-accept. (This set can also be described in other ways, including
-"simple to cut-and-paste" and "understandable by some community".) Its
-companion defines simpler rules, accepts more addresses, and is
-intended for software like MTAs.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document recommends a best current practice for systems that
+provision SMTPUTF8 email addresses, that is, that decide which
+addresses to create for their users. It recommends provisioning only
+addresses that<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-abstract-2.1">
+          <p id="section-abstract-2.1.1">are easy to read within some community,<a href="#section-abstract-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-abstract-2.2">
+          <p id="section-abstract-2.2.1">are easy to cut and paste, and<a href="#section-abstract-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-abstract-2.3">
+          <p id="section-abstract-2.3.1">are unlikely to be rejected by email validator software.<a href="#section-abstract-2.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-abstract-3">This is one of a pair of documents. This one recommends what a
+provisioning system should create. Its companion is simpler and more
+permissive, and is intended for software that has to display an address
+received from a potentially malevolent source. Neither document changes
+the address syntax: the addresses recommended here are a subset of
+those that RFC6532 permits, chosen to pass the validators that
+implement RFC5322bis or the WHATWG email syntax.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-discussion-venues">
@@ -1131,7 +1155,7 @@ intended for software like MTAs.<a href="#section-abstract-2" class="pilcrow">¶
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 April 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 May 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1252,30 +1276,43 @@ many things that users and implementers find surprising and sometimes
 worrying.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">The flexibility has caused considerable reluctance to support the full
 syntax in contexts such as web form address validation.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">This document attempts to describe rules that:<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-4">This document describes rules that identify addresses suitable for a
+provisioning system to create, and recommends that such systems create
+only addresses that satisfy them. The rules —<a href="#section-1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-1-5">
 <li id="section-1-5.1">
-          <p id="section-1-5.1.1">includes the addresses that users generally want to use for
-themselves and organizations want to provision for their employees.<a href="#section-1-5.1.1" class="pilcrow">¶</a></p>
+          <p id="section-1-5.1.1">include the addresses that users generally want for themselves and
+that organizations want to provision for their staff;<a href="#section-1-5.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-1-5.2">
-          <p id="section-1-5.2.1">includes the addresses that have been used significantly, even if not
-exactly what users wanted.<a href="#section-1-5.2.1" class="pilcrow">¶</a></p>
+          <p id="section-1-5.2.1">include the addresses that have been used significantly, even if not
+exactly what users wanted;<a href="#section-1-5.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-1-5.3">
-          <p id="section-1-5.3.1">excludes confusable things.<a href="#section-1-5.3.1" class="pilcrow">¶</a></p>
+          <p id="section-1-5.3.1">exclude confusable things;<a href="#section-1-5.3.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-1-5.4">
-          <p id="section-1-5.4.1">excludes things that have been described as security risks.<a href="#section-1-5.4.1" class="pilcrow">¶</a></p>
+          <p id="section-1-5.4.1">exclude things that have been described as security risks; and<a href="#section-1-5.4.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-1-5.5">
-          <p id="section-1-5.5.1">Looks safe at first glance to implementers (including ones with
-limited knowledge of unicode).<a href="#section-1-5.5.1" class="pilcrow">¶</a></p>
+          <p id="section-1-5.5.1">are visibly safe to implementers, including ones with limited
+knowledge of Unicode.<a href="#section-1-5.5.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 <p id="section-1-6">These goals are somewhat aspirational. For example, lower-case L and
-upper-case i are confusable and cannot realistically be disallowed,
+upper-case i are confusable and cannot realistically be disallowed;
 the protocol poLIce would arrest us all.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">These rules select a subset of the addresses that <span>[<a href="#RFC6532" class="cite xref">RFC6532</a>]</span> permits.
+This document adds no new syntax and updates no other specification. An
+interoperable address is valid SMTPUTF8, and rule 2 keeps the all-ASCII
+ones compatible with validators built on <span>[<a href="#I-D.ietf-emailcore-rfc5322bis" class="cite xref">I-D.ietf-emailcore-rfc5322bis</a>]</span>
+or the WHATWG <span>[<a href="#TYPE_EMAIL" class="cite xref">TYPE_EMAIL</a>]</span> syntax.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8">Considerable thought has also been given to nonstandard email address
+validators and to non-email use of addresses. For example, some
+software uses email-like identifiers for logging in. Some
+implementations are based on <span>[<a href="#TYPE_EMAIL" class="cite xref">TYPE_EMAIL</a>]</span>, some on <span>[<a href="#UAX31" class="cite xref">UAX31</a>]</span>, some
+on word of mouth, and many are closed-source or SaaS. It is hoped that
+addresses matching these five rules will be maximally compatible.<a href="#section-1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="requirements-language">
@@ -1445,16 +1482,19 @@ as broadly similar to the Common LGR and different in detail.<a href="#section-5
       <h2 id="name-rules-for-interoperable-ema">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-rules-for-interoperable-ema" class="section-name selfRef">Rules for interoperable email addresses</a>
       </h2>
-<p id="section-6-1">Based on the above descriptions, the following rules are formulated
-for interoperable email addresses.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">Based on the above descriptions, the following rules identify an
+address as interoperable. A system that provisions SMTPUTF8 email
+addresses <span class="bcp14">SHOULD</span> create only interoperable addresses. An address is
+interoperable only if it satisfies all five rules.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6-2">
 <li id="section-6-2.1">
           <p id="section-6-2.1.1">An atom in an interoperable address <span class="bcp14">MUST NOT</span> be an a-label.<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-6-2.2">
-          <p id="section-6-2.2.1">If the address matches the grammar in <span>[<a href="#RFC5322" class="cite xref">RFC5322</a>]</span>, then in order to
-be interoperable it <span class="bcp14">MUST</span> also match the grammar specified by the W3C
-WHATWG <span>[<a href="#TYPE_EMAIL" class="cite xref">TYPE_EMAIL</a>]</span> spec.<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-6-2.2.1">If the address matches the grammar in
+<span>[<a href="#I-D.ietf-emailcore-rfc5322bis" class="cite xref">I-D.ietf-emailcore-rfc5322bis</a>]</span>, then in order to be interoperable
+it <span class="bcp14">MUST</span> also match the grammar specified by the W3C WHATWG
+<span>[<a href="#TYPE_EMAIL" class="cite xref">TYPE_EMAIL</a>]</span> spec.<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-6-2.3">
           <p id="section-6-2.3.1">An address <span class="bcp14">MUST</span> conform to the PRECIS IdentifierClass and use
@@ -1486,8 +1526,8 @@ Common, or are ASCII.<a href="#section-6-2.5.2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 <p id="section-6-3">The above rules do not modify the permitted length as specified in
-(RFC goes here, perhaps still 5322). The maximum length remains 64
-bytes, which will often be less than 64 unicode codepoints.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<span>[<a href="#I-D.ietf-emailcore-rfc5322bis" class="cite xref">I-D.ietf-emailcore-rfc5322bis</a>]</span>. The maximum length of a localpart
+remains 64 bytes, which will often be less than 64 unicode codepoints.<a href="#section-6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="examples">
@@ -1508,7 +1548,7 @@ of 'Latin' and 'Common' code points (and ./@).<a href="#section-7-2" class="pilc
 arabic letter, written right-to-left.) It is interoperable because 1)
 it does not contain any a-label, 2) does not apply, 3) it consists
 entirely of permissible code points, 4) the only right-to-left code
-points used are ASCII digits and 6) all code points are 'Arabic' or
+points used are ASCII digits and 5) all code points are 'Arabic' or
 ASCII digits (or @/).<a href="#section-7-4" class="pilcrow">¶</a></p>
 <p id="section-7-5">(Note that it's interoperable even though its top-level domain cannot
 exist: The rules in this document don't require network access, and
@@ -1582,7 +1622,8 @@ document) mixes left-to-right and right-to-left writing, parts of both
 the localpart and the domain part can be rendered on the same side of
 the '@'. This can create the appearance that a different domain signed
 the message.<a href="#section-10-3" class="pilcrow">¶</a></p>
-<p id="section-10-4">The rules in this document permit a number of code points that<a href="#section-10-4" class="pilcrow">¶</a></p>
+<p id="section-10-4">The rules in this document permit a number of code points that can
+make it difficult to cut and paste.<a href="#section-10-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -1596,9 +1637,9 @@ the message.<a href="#section-10-3" class="pilcrow">¶</a></p>
 <a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="RFC5322">[RFC5322]</dt>
+<dt id="I-D.ietf-emailcore-rfc5322bis">[I-D.ietf-emailcore-rfc5322bis]</dt>
         <dd>
-<span class="refAuthor">Resnick, P., Ed.</span>, <span class="refTitle">"Internet Message Format"</span>, <span class="seriesInfo">RFC 5322</span>, <span class="seriesInfo">DOI 10.17487/RFC5322</span>, <time datetime="2008-10" class="refDate">October 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5322">https://www.rfc-editor.org/rfc/rfc5322</a>&gt;</span>. </dd>
+<span class="refAuthor">Resnick, P.</span>, <span class="refTitle">"Internet Message Format"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-emailcore-rfc5322bis-12</span>, <time datetime="2024-06-13" class="refDate">13 June 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-emailcore-rfc5322bis-12">https://datatracker.ietf.org/doc/html/draft-ietf-emailcore-rfc5322bis-12</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5890">[RFC5890]</dt>
         <dd>
@@ -1665,6 +1706,10 @@ the message.<a href="#section-10-3" class="pilcrow">¶</a></p>
         <dd>
 <span class="refAuthor">Whistler, K.</span>, <span class="refTitle">"Unicode Script Property"</span>, <time datetime="2025-07-31" class="refDate">31 July 2025</time>, <span>&lt;<a href="https://unicode.org/reports/tr24">https://unicode.org/reports/tr24</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="UAX31">[UAX31]</dt>
+        <dd>
+<span class="refAuthor">Davis, M.</span>, <span class="refTitle">"Unicode Identifiers and Syntax"</span>, <time datetime="2025-08-20" class="refDate">20 August 2025</time>, <span>&lt;<a href="https://unicode.org/reports/tr31">https://unicode.org/reports/tr31</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="UMLAUT">[UMLAUT]</dt>
         <dd>
 <span class="refTitle">"Metal Umlaut"</span>, <span>n.d.</span>, <span>&lt;<a href="https://en.wikipedia.org/wiki/Metal_umlaut">https://en.wikipedia.org/wiki/Metal_umlaut</a>&gt;</span>. </dd>
@@ -1702,11 +1747,11 @@ publication (and after IETF Last Call).<a href="#appendix-A-3" class="pilcrow">�
 <a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
 <p id="appendix-B-1">The authors wish to thank John C. Klensin, Jeremy Harris,
-Daniel Eggert,
+Daniel Eggert, Pete Resnick, Barry Leiba,
 (your name here, please)<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <p id="appendix-B-2">Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
 examples and documentation.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
-<p id="appendix-B-3">阿Q正传@ is a famous Chinese novella, 阿Q is the main character.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-3">阿Q正传 is a famous Chinese novella, 阿Q is the main character.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rationales-for-each-condition">
@@ -1770,14 +1815,22 @@ text with ASCII is allowed in the way that is currently used.<a href="#appendix-
       </h2>
 <ol start="1" type="1" class="normal type-1" id="appendix-E-1">
 <li id="appendix-E-1.1">
-          <p id="appendix-E-1.1.1">Metal umlauts might be a problem. Accents are used sometimes with
-non-latin, but very seldom and might be seen as surprising to native
-users of e.g. cyrillic, even if Åквариум exists.
-https://krebsonsecurity.com/2022/11/disneyland-malware-team-its-a-puny-world-after-all/
-is worth considering. Not entirely clear how to subdivide the
-Common script so it can be used with some scripts, not with others.<a href="#appendix-E-1.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-E-1.1.1">U+200D ZWJ<a href="#appendix-E-1.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-E-1.2">
+          <p id="appendix-E-1.2.1">Check diffs with UTS58<a href="#appendix-E-1.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-E-1.3">
+          <p id="appendix-E-1.3.1">RFC5321 blockage<a href="#appendix-E-1.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-E-1.4">
+          <p id="appendix-E-1.4.1">Directionality, we don't add extra rules<a href="#appendix-E-1.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-E-1.5">
+          <p id="appendix-E-1.5.1">Updating RFC6532<a href="#appendix-E-1.5.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
+<p id="appendix-E-2">6.<a href="#appendix-E-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
