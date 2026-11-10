@@ -65,11 +65,10 @@ informative:
 
 --- abstract
 
-This document updates the email address syntax to a set that includes
-the addresses in active use, includes the addresses likely to be used
-based on what writing systems are used together, and excludes
-addresses that pose risks when recipient software renders or processes
-them. It updates RFC 6532.
+This document updates the email address syntax to include the
+addresses in active use, include the addresses likely to be used based
+on what writing systems are used together, and exclude addresses that
+pose risks when recipient software renders or processes them.
 
 --- middle
 
