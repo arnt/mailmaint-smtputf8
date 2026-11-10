@@ -1300,9 +1300,9 @@ that rule (defined in <span>[<a href="#RFC8264" class="cite xref">RFC8264</a>]</
 disregarded. Han, Hiragana and Katakana count as one script here,
 since Japanese uses all three together; so do Han and Hangul, and Han
 and Bopomofo. (For example: In the word Orléans, Orl and ans are ASCII
-and é is non-ASCII. The single é is in a single script, so the word
-contains only one script. まり子 is Hiragana and Han, which count as
-one.)<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
+and é is non-ASCII. Disregarding ASCII leaves a single é, necessarily
+a single script, so the word contains only one script. Another
+example: まり子 is Hiragana and Han, which count as one.)<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-4-2.4">
           <p id="section-4-2.4.1">An address <span class="bcp14">MUST</span> be in the Unicode NFC form (see <span>[<a href="#UAX15" class="cite xref">UAX15</a>]</span>).<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
@@ -1328,9 +1328,9 @@ or normalize non-conforming addresses.<a href="#section-4-4" class="pilcrow">¶<
 A-label, 2) it consists entirely of permissible code points, 3) it
 contains no non-ASCII code points at all and 4) it is in NFC form.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">The address dømi@dømi.fo is permitted, because 1) it does not contain
-any A-label, 2) the IdentifierClass permits every code point in it,
-3) it consists entirely of 'Latin' and 'Common' code points (and ./@)
-and 4) it is in NFC form.<a href="#section-5-2" class="pilcrow">¶</a></p>
+any A-label, 2) the IdentifierClass permits every code point in it, 3)
+it consists entirely of 'Latin' and 'Common' code points and 4) it is
+in NFC form.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">The address U+200E '@' U+200F '.' U+200E is not permitted, because 2)
 the IdentifierClass disallows U+200E and U+200F as ignorable code
 points.<a href="#section-5-3" class="pilcrow">¶</a></p>
