@@ -229,6 +229,17 @@ example, while a human recipient might be confused by a homograph
 attack or a hard-to-read A-label, a receiving SMTP server can hardly
 be.)
 
+However, a program that acts as an SMTP client is almost inevitably
+affected. This document requires such program to ensure that the
+addresses used in the message (To, Cc etc) are normalised. In a large
+majority of cases, the addresses in To/Cc are also used in RCPT
+TO. Whether this document updates {{RFC6531}} formally or merely
+affects all implementations is a good question.
+
+If it updatesthe document, then this document should perhaps say
+something like "the SMTP server MAY normalize addresses when looking
+up a destination to perform delivery, but is not required to".
+
 # IANA Considerations {#IANA}
 
 This document does not require any actions from the IANA.
@@ -260,7 +271,7 @@ Turkish dotless ı.
 
 The authors wish to thank John C. Klensin,
 Daniel Eggert, Andrew Gallagher, Jeffrey Stedfast, Pete Resnick,
-Narendra Singh Bisht,
+Narendra Singh Bisht, Collin Anderson
 (your name here, please)
 
 (Wow, the ack section is already outdated)
