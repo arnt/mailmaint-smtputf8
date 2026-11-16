@@ -2,7 +2,7 @@
 <html lang="en" class="Internet-Draft">
 <head>
 <meta charset="utf-8">
-<meta content="Common,Han,Hiragana,Latin" name="scripts">
+<meta content="Common,Han,Hangul,Hiragana,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
 <title>SMTPUTF8 Email Addresses</title>
 <meta content="Arnt Gulbrandsen" name="author">
@@ -1049,7 +1049,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Gulbrandsen &amp; Yao</td>
-<td class="center">Expires 14 May 2027</td>
+<td class="center">Expires 20 May 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg {
 <a href="https://www.rfc-editor.org/rfc/rfc6532" class="eref">6532</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-11-10" class="published">10 November 2026</time>
+<time datetime="2026-11-16" class="published">16 November 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-05-14">14 May 2027</time></dd>
+<dd class="expires"><time datetime="2027-05-20">20 May 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1122,7 +1122,7 @@ pose risks when recipient software renders or processes them.<a href="#section-a
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 May 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 May 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1220,7 +1220,7 @@ domain parts in the SMTP transaction ("RCPT TO:<a href="mailto:info@xn--dmi-0na.
 and presenting the Unicode version (dømi.fo in this case) in the user
 interface.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">The email address syntax extension in <span>[<a href="#RFC6532" class="cite xref">RFC6532</a>]</span> allows almost all
-UTF8 strings as localparts. While this certainly allows everything
+UTF-8 strings as localparts. While this certainly allows everything
 users want to use, it is also flexible enough to allow many things
 that users and implementers find surprising and sometimes worrying.
 For example, the domain extracted by code may not match that shown to
@@ -1297,23 +1297,22 @@ that rule (defined in <span>[<a href="#RFC8264" class="cite xref">RFC8264</a>]</
 </li>
         <li id="section-4-2.3">
           <p id="section-4-2.3.1">An address <span class="bcp14">MUST NOT</span> contain more than one script, when ASCII is
-disregarded. Han, Hiragana and Katakana count as one script here,
-since Japanese uses all three together; so do Han and Hangul, and Han
-and Bopomofo. (For example: In the word Orléans, Orl and ans are ASCII
-and é is non-ASCII. Disregarding ASCII leaves a single é, necessarily
-a single script, so the word contains only one script. Another
-example: まり子 is Hiragana and Han, which count as one.)<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
+disregarded. Three groups of scripts are permitted: Han, Hiragana and Katakana, Han and Hangul, and finally Han and Bopomofo. (For example: In the word
+Orléans, Orl and ans are ASCII and é is non-ASCII. Disregarding ASCII
+leaves a single é, necessarily a single script, so the word contains
+only one script. Another example: まり子 is Hiragana and Han, which
+count as one.)<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-4-2.4">
           <p id="section-4-2.4.1">An address <span class="bcp14">MUST</span> be in the Unicode NFC form (see <span>[<a href="#UAX15" class="cite xref">UAX15</a>]</span>).<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
-<p id="section-4-3">These rules do not affect rules in other documents. Most notably,
-domain-names in email addresses are almost always also domain names on
-the public internet, which implies that the rules specified by
-<span>[<a href="#RFC952" class="cite xref">RFC952</a>]</span>, <span>[<a href="#RFC5891" class="cite xref">RFC5891</a>]</span> and others affect email addresses. Domain
-registries often have policies regarding which names may be
-registered.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-3">These rules do not affect rules in other documents. Most notably, the
+domain-name production in an in email addresses is almost always also
+a domain names on the public internet, which implies that the rules
+specified by <span>[<a href="#RFC952" class="cite xref">RFC952</a>]</span>, <span>[<a href="#RFC5891" class="cite xref">RFC5891</a>]</span> and others affect email
+addresses. Domain registries often have policies regarding which names
+may be registered.<a href="#section-4-3" class="pilcrow">¶</a></p>
 <p id="section-4-4">These rules constrain how to generate email addresses in email
 messages. This document does not require receivers to reject, alter
 or normalize non-conforming addresses.<a href="#section-4-4" class="pilcrow">¶</a></p>
@@ -1336,17 +1335,15 @@ the IdentifierClass disallows U+200E and U+200F as ignorable code
 points.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <p id="section-5-4">The address 'admin' U+3164 '@example.com' is not permitted for the
 same reason. U+3164 HANGUL FILLER renders as nothing at all, so the
-address looks exactly like admin@example.com. U+0640 ARABIC TATWEEL is
-disallowed too, although it is a letter by category: it only elongates
-the preceding letter, and would let one address be spelled in any
-number of ways.<a href="#section-5-4" class="pilcrow">¶</a></p>
+address looks exactly like admin@example.com.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <p id="section-5-5">The address まり子@まり子.日本 is permitted, because 1) it contains no
 A-label, 2) the IdentifierClass permits every code point in it, 3)
 Hiragana and Han count as one script and 4) it is in NFC form.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <p id="section-5-6">阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
-dømi@dømi.fo is legal because it contains ASCII and Latin, but
+dømi@dømi.fo is permitted because it contains ASCII and Latin, but
 阿Q正传@dømi.fo is not, because it contains both Han (阿) and Latin
-non-ASCII (ø).<a href="#section-5-6" class="pilcrow">¶</a></p>
+non-ASCII (ø), and 지훈@まり子.日本 is not because contains both
+Hangul and Hiragana.<a href="#section-5-6" class="pilcrow">¶</a></p>
 <p id="section-5-7">example@-example-.example.com is permitted by the rules above.
 However, since <span>[<a href="#RFC952" class="cite xref">RFC952</a>]</span> and its successors prohibit both of the
 hyphens, that email address is effectively not permitted on the
@@ -1381,6 +1378,15 @@ restrictions in this document are not needed within SMTP. (For
 example, while a human recipient might be confused by a homograph
 attack or a hard-to-read A-label, a receiving SMTP server can hardly
 be.)<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">However, a program that acts as an SMTP client is almost inevitably
+affected. This document requires such program to ensure that the
+addresses used in the message (To, Cc etc) are normalised. In a large
+majority of cases, the addresses in To/Cc are also used in RCPT
+TO. Whether this document updates <span>[<a href="#RFC6531" class="cite xref">RFC6531</a>]</span> formally or merely
+affects all implementations is a good question.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-4">If it updatesthe document, then this document should perhaps say
+something like "the SMTP server <span class="bcp14">MAY</span> normalize addresses when looking
+up a destination to perform delivery, but is not required to".<a href="#section-7-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="IANA">
@@ -1451,11 +1457,11 @@ Turkish dotless ı.<a href="#section-9-3" class="pilcrow">¶</a></p>
 <dd class="break"></dd>
 <dt id="UAX15">[UAX15]</dt>
         <dd>
-<span class="refAuthor">Whistler, K.</span>, <span class="refTitle">"Unicode Normalization Forms"</span>, <time datetime="2026-08-22" class="refDate">22 August 2026</time>, <span>&lt;<a href="https://www.unicode.org/reports/tr15">https://www.unicode.org/reports/tr15</a>&gt;</span>. </dd>
+<span class="refAuthor">Whistler, K.</span>, <span class="refTitle">"Unicode Normalization Forms"</span>, <time datetime="2026-08-12" class="refDate">12 August 2026</time>, <span>&lt;<a href="https://www.unicode.org/reports/tr15">https://www.unicode.org/reports/tr15</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="UAX24">[UAX24]</dt>
         <dd>
-<span class="refAuthor">Whistler, K.</span>, <span class="refTitle">"Unicode Script Property"</span>, <time datetime="2025-07-31" class="refDate">31 July 2025</time>, <span>&lt;<a href="https://unicode.org/reports/tr24">https://unicode.org/reports/tr24</a>&gt;</span>. </dd>
+<span class="refAuthor">Whistler, K.</span>, <span class="refTitle">"Unicode Script Property"</span>, <time datetime="2026-08-28" class="refDate">28 August 2026</time>, <span>&lt;<a href="https://unicode.org/reports/tr24">https://unicode.org/reports/tr24</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -1506,7 +1512,7 @@ Turkish dotless ı.<a href="#section-9-3" class="pilcrow">¶</a></p>
       </h2>
 <p id="appendix-A-1">The authors wish to thank John C. Klensin,
 Daniel Eggert, Andrew Gallagher, Jeffrey Stedfast, Pete Resnick,
-Narendra Singh Bisht,
+Narendra Singh Bisht, Collin Anderson
 (your name here, please)<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2">(Wow, the ack section is already outdated)<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 <p id="appendix-A-3">Dømi.fo and 例子.中国 are reserved by nic.fo and CNNIC for use in
@@ -1550,7 +1556,7 @@ publication (and after IETF Last Call).<a href="#appendix-C-3" class="pilcrow">�
       </h2>
 <ol start="1" type="1" class="normal type-1" id="appendix-D-1">
 <li id="appendix-D-1.1">
-          <p id="appendix-D-1.1.1"><span class="bcp14">SHOULD NOT</span> or <span class="bcp14">MUST NOT</span> contain A-labels?<a href="#appendix-D-1.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-D-1.1.1">Update 6531?<a href="#appendix-D-1.1.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 </section>

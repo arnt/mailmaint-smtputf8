@@ -6,7 +6,7 @@ mailmaint                                                 A. Gulbrandsen
 Internet-Draft                                                     ICANN
 Updates: 6532 (if approved)                                       J. Yao
 Intended status: Standards Track                                   CNNIC
-Expires: 14 May 2027                                    10 November 2026
+Expires: 20 May 2027                                    16 November 2026
 
 
                         SMTPUTF8 Email Addresses
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 May 2027.
+   This Internet-Draft will expire on 20 May 2027.
 
 Copyright Notice
 
@@ -92,7 +92,7 @@ Table of Contents
    (dømi.fo in this case) in the user interface.
 
    The email address syntax extension in [RFC6532] allows almost all
-   UTF8 strings as localparts.  While this certainly allows everything
+   UTF-8 strings as localparts.  While this certainly allows everything
    users want to use, it is also flexible enough to allow many things
    that users and implementers find surprising and sometimes worrying.
    For example, the domain extracted by code may not match that shown to
@@ -162,22 +162,22 @@ Table of Contents
        [RFC5892] Appendix A).
 
    3.  An address MUST NOT contain more than one script, when ASCII is
-       disregarded.  Han, Hiragana and Katakana count as one script
-       here, since Japanese uses all three together; so do Han and
-       Hangul, and Han and Bopomofo.  (For example: In the word Orléans,
-       Orl and ans are ASCII and é is non-ASCII.  Disregarding ASCII
-       leaves a single é, necessarily a single script, so the word
-       contains only one script.  Another example: まり子 is Hiragana and
-       Han, which count as one.)
+       disregarded.  Three groups of scripts are permitted: Han,
+       Hiragana and Katakana, Han and Hangul, and finally Han and
+       Bopomofo.  (For example: In the word Orléans, Orl and ans are
+       ASCII and é is non-ASCII.  Disregarding ASCII leaves a single é,
+       necessarily a single script, so the word contains only one
+       script.  Another example: まり子 is Hiragana and Han, which count as
+       one.)
 
    4.  An address MUST be in the Unicode NFC form (see [UAX15]).
 
    These rules do not affect rules in other documents.  Most notably,
-   domain-names in email addresses are almost always also domain names
-   on the public internet, which implies that the rules specified by
-   [RFC952], [RFC5891] and others affect email addresses.  Domain
-   registries often have policies regarding which names may be
-   registered.
+   the domain-name production in an in email addresses is almost always
+   also a domain names on the public internet, which implies that the
+   rules specified by [RFC952], [RFC5891] and others affect email
+   addresses.  Domain registries often have policies regarding which
+   names may be registered.
 
    These rules constrain how to generate email addresses in email
    messages.  This document does not require receivers to reject, alter
@@ -200,19 +200,17 @@ Table of Contents
 
    The address 'admin' U+3164 '@example.com' is not permitted for the
    same reason.  U+3164 HANGUL FILLER renders as nothing at all, so the
-   address looks exactly like admin@example.com.  U+0640 ARABIC TATWEEL
-   is disallowed too, although it is a letter by category: it only
-   elongates the preceding letter, and would let one address be spelled
-   in any number of ways.
+   address looks exactly like admin@example.com.
 
    The address まり子@まり子.日本 is permitted, because 1) it contains no
    A-label, 2) the IdentifierClass permits every code point in it, 3)
    Hiragana and Han count as one script and 4) it is in NFC form.
 
    阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
-   dømi@dømi.fo is legal because it contains ASCII and Latin, but
+   dømi@dømi.fo is permitted because it contains ASCII and Latin, but
    阿Q正传@dømi.fo is not, because it contains both Han (阿) and Latin non-
-   ASCII (ø).
+   ASCII (ø), and 지훈@まり子.日本 is not because contains both Hangul and
+   Hiragana.
 
    example@-example-.example.com is permitted by the rules above.
    However, since [RFC952] and its successors prohibit both of the
@@ -242,6 +240,17 @@ Table of Contents
    example, while a human recipient might be confused by a homograph
    attack or a hard-to-read A-label, a receiving SMTP server can hardly
    be.)
+
+   However, a program that acts as an SMTP client is almost inevitably
+   affected.  This document requires such program to ensure that the
+   addresses used in the message (To, Cc etc) are normalised.  In a
+   large majority of cases, the addresses in To/Cc are also used in RCPT
+   TO.  Whether this document updates [RFC6531] formally or merely
+   affects all implementations is a good question.
+
+   If it updatesthe document, then this document should perhaps say
+   something like "the SMTP server MAY normalize addresses when looking
+   up a destination to perform delivery, but is not required to".
 
 8.  IANA Considerations
 
@@ -302,10 +311,10 @@ Table of Contents
               RFC 8264, DOI 10.17487/RFC8264, October 2017,
               <https://www.rfc-editor.org/rfc/rfc8264>.
 
-   [UAX15]    Whistler, K., "Unicode Normalization Forms", 22 August
+   [UAX15]    Whistler, K., "Unicode Normalization Forms", 12 August
               2026, <https://www.unicode.org/reports/tr15>.
 
-   [UAX24]    Whistler, K., "Unicode Script Property", 31 July 2025,
+   [UAX24]    Whistler, K., "Unicode Script Property", 28 August 2026,
               <https://unicode.org/reports/tr24>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -344,7 +353,7 @@ Appendix A.  Acknowledgments
 
    The authors wish to thank John C.  Klensin, Daniel Eggert, Andrew
    Gallagher, Jeffrey Stedfast, Pete Resnick, Narendra Singh Bisht,
-   (your name here, please)
+   Collin Anderson (your name here, please)
 
    (Wow, the ack section is already outdated)
 
@@ -378,7 +387,7 @@ Appendix C.  Testing
 
 Appendix D.  Open issues
 
-   1.  SHOULD NOT or MUST NOT contain A-labels?
+   1.  Update 6531?
 
 Authors' Addresses
 
