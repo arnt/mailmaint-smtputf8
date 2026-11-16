@@ -39,14 +39,14 @@ normative:
   UAX15:
     target: https://www.unicode.org/reports/tr15
     title: Unicode Normalization Forms
-    date: 2026-08-22
+    date: 2026-08-12
     author:
       -
         name: Ken Whistler
   UAX24:
     target: https://unicode.org/reports/tr24
     title: Unicode Script Property
-    date: 2025-07-31
+    date: 2026-08-28
     author:
       -
         name: Ken Whistler
@@ -82,7 +82,7 @@ and presenting the Unicode version (dømi.fo in this case) in the user
 interface.
 
 The email address syntax extension in {{RFC6532}} allows almost all
-UTF8 strings as localparts. While this certainly allows everything
+UTF-8 strings as localparts. While this certainly allows everything
 users want to use, it is also flexible enough to allow many things
 that users and implementers find surprising and sometimes worrying.
 For example, the domain extracted by code may not match that shown to
@@ -149,21 +149,20 @@ that rule (defined in {{RFC8264}} and described in depth in
 {{RFC5892}} Appendix A).
 
 3. An address MUST NOT contain more than one script, when ASCII is
-disregarded. Han, Hiragana and Katakana count as one script here,
-since Japanese uses all three together; so do Han and Hangul, and Han
-and Bopomofo. (For example: In the word Orléans, Orl and ans are ASCII
-and é is non-ASCII. Disregarding ASCII leaves a single é, necessarily
-a single script, so the word contains only one script. Another
-example: まり子 is Hiragana and Han, which count as one.)
+disregarded. Three groups of scripts are permitted: Han, Hiragana and Katakana, Han and Hangul, and finally Han and Bopomofo. (For example: In the word
+Orléans, Orl and ans are ASCII and é is non-ASCII. Disregarding ASCII
+leaves a single é, necessarily a single script, so the word contains
+only one script. Another example: まり子 is Hiragana and Han, which
+count as one.)
 
 4. An address MUST be in the Unicode NFC form (see {{UAX15}}).
 
-These rules do not affect rules in other documents. Most notably,
-domain-names in email addresses are almost always also domain names on
-the public internet, which implies that the rules specified by
-{{RFC952}}, {{RFC5891}} and others affect email addresses. Domain
-registries often have policies regarding which names may be
-registered.
+These rules do not affect rules in other documents. Most notably, the
+domain-name production in an in email addresses is almost always also
+a domain names on the public internet, which implies that the rules
+specified by {{RFC952}}, {{RFC5891}} and others affect email
+addresses. Domain registries often have policies regarding which names
+may be registered.
 
 These rules constrain how to generate email addresses in email
 messages. This document does not require receivers to reject, alter
@@ -186,19 +185,17 @@ points.
 
 The address 'admin' U+3164 '@example.com' is not permitted for the
 same reason. U+3164 HANGUL FILLER renders as nothing at all, so the
-address looks exactly like admin@example.com. U+0640 ARABIC TATWEEL is
-disallowed too, although it is a letter by category: it only elongates
-the preceding letter, and would let one address be spelled in any
-number of ways.
+address looks exactly like admin@example.com.
 
 The address まり子@まり子.日本 is permitted, because 1) it contains no
 A-label, 2) the IdentifierClass permits every code point in it, 3)
 Hiragana and Han count as one script and 4) it is in NFC form.
 
 阿Q正传@阿Q正传.example is permitted because it contains ASCII and Han,
-dømi@dømi.fo is legal because it contains ASCII and Latin, but
+dømi@dømi.fo is permitted because it contains ASCII and Latin, but
 阿Q正传@dømi.fo is not, because it contains both Han (阿) and Latin
-non-ASCII (ø).
+non-ASCII (ø), and 지훈@まり子.日本 is not because contains both
+Hangul and Hiragana.
 
 example@-example-.example.com is permitted by the rules above.
 However, since {{RFC952}} and its successors prohibit both of the
@@ -307,4 +304,5 @@ publication (and after IETF Last Call).
 
 # Open issues
 
-1. SHOULD NOT or MUST NOT contain A-labels?
+1. Update 6531?
+
