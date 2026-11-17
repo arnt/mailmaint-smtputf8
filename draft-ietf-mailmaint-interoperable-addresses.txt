@@ -5,8 +5,8 @@
 mailmaint                                                 A. Gulbrandsen
 Internet-Draft                                                     ICANN
 Intended status: Best Current Practice                            J. Yao
-Expires: 20 May 2027                                               CNNIC
-                                                        16 November 2026
+Expires: 21 May 2027                                               CNNIC
+                                                        17 November 2026
 
 
           Provisioning Interoperable SMTPUTF8 Email Addresses
@@ -59,7 +59,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 May 2027.
+   This Internet-Draft will expire on 21 May 2027.
 
 Copyright Notice
 
