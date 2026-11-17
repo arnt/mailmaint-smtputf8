@@ -2,6 +2,9 @@
 #include <iostream>
 #include <string>
 
+#include <unicode/normalizer2.h>
+#include <unicode/unistr.h>
+
 /* This large enum was created by the following command:
 
    (awk '/^\{/{print $4}' < unicodedata-1.h ; \
@@ -224,6 +227,13 @@ bool smtputf8_syntax_valid(const std::wstring s) {
 	return false;
     if(arabicIndicDigitsUsed && extendedArabicIndicDigitsUsed)
 	return false;
+    // Rule 4.
+    UErrorCode ec = U_ZERO_ERROR;
+    const icu::Normalizer2 * nfc = icu::Normalizer2::getNFCInstance(ec);
+    icu::UnicodeString u = icu::UnicodeString::fromUTF32(
+	reinterpret_cast<const UChar32 *>(s.data()), s.length());
+    if(U_FAILURE(ec) || !nfc->isNormalized(u, ec) || U_FAILURE(ec))
+	return false;
     return true;
 }
 
@@ -265,7 +275,7 @@ static const struct {
     { "ا@2ا.ا", true },
     { "ا@example.com", true },
     { "café@example.com", true },
-    { "cafe\u0301@example.com", true },
+    { "cafe\u0301@example.com", false },
     { "\"john.doe\"@example.com", true },
     { "\"john doe\"@example.com", true },
     { "grå\u0009\u200B\uFEFF\u00AD\u00A0\u2003\u3000@grå.org", false },

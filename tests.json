@@ -171,9 +171,8 @@
     },
     {
 	"address": "cafe\u0301@example.com",
-	"valid": true,
-	"interoperable": false,
-	"comment": "the same café in NFD (e + U+0301 combining acute), one code point longer; valid, but not interoperable because it is not NFC"
+	"valid": false,
+	"comment": "the same café in NFD (e + U+0301 combining acute), one code point longer"
     },
     {
 	"address": "\"john.doe\"@example.com",
